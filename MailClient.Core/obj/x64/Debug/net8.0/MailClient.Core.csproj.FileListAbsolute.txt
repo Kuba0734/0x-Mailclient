@@ -1,0 +1,12 @@
+C:\Dev\MailClient\MailClient.Core\bin\x64\Debug\net8.0\MailClient.Core.deps.json
+C:\Dev\MailClient\MailClient.Core\bin\x64\Debug\net8.0\MailClient.Core.dll
+C:\Dev\MailClient\MailClient.Core\bin\x64\Debug\net8.0\MailClient.Core.pdb
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\MailClient.Core.csproj.AssemblyReference.cache
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\MailClient.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\MailClient.Core.AssemblyInfoInputs.cache
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\MailClient.Core.AssemblyInfo.cs
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\MailClient.Core.csproj.CoreCompileInputs.cache
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\MailClient.Core.dll
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\refint\MailClient.Core.dll
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\MailClient.Core.pdb
+C:\Dev\MailClient\MailClient.Core\obj\x64\Debug\net8.0\ref\MailClient.Core.dll

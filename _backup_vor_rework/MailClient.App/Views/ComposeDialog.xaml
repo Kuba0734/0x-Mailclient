@@ -1,0 +1,62 @@
+<ContentDialog
+    x:Class="MailClient.App.Views.ComposeDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="E-Mail verfassen"
+    PrimaryButtonText="Senden"
+    CloseButtonText="Verwerfen"
+    DefaultButton="Primary"
+    PrimaryButtonClick="Send_Click"
+    MinWidth="600"
+    MaxWidth="800">
+
+    <ScrollViewer>
+        <StackPanel Spacing="12" Padding="0,4">
+
+            <!-- Von (readonly) -->
+            <TextBox
+                x:Name="FromBox"
+                Header="Von"
+                IsReadOnly="True"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+            <!-- An -->
+            <TextBox
+                x:Name="ToBox"
+                Header="An"
+                PlaceholderText="empfaenger@example.com"
+                InputScope="EmailSmtpAddress"
+                AcceptsReturn="False" />
+
+            <!-- CC -->
+            <TextBox
+                x:Name="CcBox"
+                Header="CC (optional)"
+                PlaceholderText="cc@example.com"
+                InputScope="EmailSmtpAddress" />
+
+            <!-- Betreff -->
+            <TextBox
+                x:Name="SubjectBox"
+                Header="Betreff"
+                PlaceholderText="Betreff eingeben..." />
+
+            <!-- Nachricht -->
+            <TextBox
+                x:Name="BodyBox"
+                Header="Nachricht"
+                PlaceholderText="Ihre Nachricht..."
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                Height="280"
+                VerticalContentAlignment="Top" />
+
+            <!-- Fehler -->
+            <InfoBar
+                x:Name="SendInfoBar"
+                IsOpen="False"
+                IsClosable="False" />
+
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>
