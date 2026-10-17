@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Dev\\MailClient\\MailClient.Core\\MailClient.Core.csproj": {}
+    "C:\\Dev\\0x-MailClient\\MailClient.Core\\MailClient.Core.csproj": {}
   },
   "projects": {
-    "C:\\Dev\\MailClient\\MailClient.Core\\MailClient.Core.csproj": {
+    "C:\\Dev\\0x-MailClient\\MailClient.Core\\MailClient.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Dev\\MailClient\\MailClient.Core\\MailClient.Core.csproj",
+        "projectUniqueName": "C:\\Dev\\0x-MailClient\\MailClient.Core\\MailClient.Core.csproj",
         "projectName": "MailClient.Core",
-        "projectPath": "C:\\Dev\\MailClient\\MailClient.Core\\MailClient.Core.csproj",
+        "projectPath": "C:\\Dev\\0x-MailClient\\MailClient.Core\\MailClient.Core.csproj",
         "packagesPath": "C:\\Users\\Kuba\\.nuget\\packages\\",
-        "outputPath": "C:\\Dev\\MailClient\\MailClient.Core\\obj\\",
+        "outputPath": "C:\\Dev\\0x-MailClient\\MailClient.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

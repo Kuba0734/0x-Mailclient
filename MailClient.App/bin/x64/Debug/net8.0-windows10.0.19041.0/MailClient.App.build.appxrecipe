@@ -10,34 +10,34 @@
     <PackageArchitecture>x64</PackageArchitecture>
     <PackageIdentityName>MailClient.App</PackageIdentityName>
     <PackageIdentityPublisher>CN=Kuba</PackageIdentityPublisher>
-    <IntermediateOutputPath>C:\Dev\MailClient\MailClient.App\obj\x64\Debug\net8.0-windows10.0.19041.0\</IntermediateOutputPath>
+    <IntermediateOutputPath>C:\Dev\0x-MailClient\MailClient.App\obj\x64\Debug\net8.0-windows10.0.19041.0\</IntermediateOutputPath>
     <RemoteDeploymentType>CopyToDevice</RemoteDeploymentType>
     <PackageRegistrationPath></PackageRegistrationPath>
     <RemoveNonLayoutFiles>false</RemoveNonLayoutFiles>
     <DeployOptionalPackages>false</DeployOptionalPackages>
     <WindowsSdkPath>C:\Program Files %28x86%29\Windows Kits\10\</WindowsSdkPath>
-    <LayoutDir>C:\Dev\MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\AppX</LayoutDir>
+    <LayoutDir>C:\Dev\0x-MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\AppX</LayoutDir>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="C:\Dev\MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\AppxManifest.xml">
+    <AppXManifest Include="C:\Dev\0x-MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\MailClient.App.runtimeconfig.json">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\MailClient.App.runtimeconfig.json">
       <PackagePath>MailClient.App.runtimeconfig.json</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\obj\x64\Debug\net8.0-windows10.0.19041.0\apphost.exe">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\obj\x64\Debug\net8.0-windows10.0.19041.0\apphost.exe">
       <PackagePath>MailClient.App.exe</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\AppLogo.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\AppLogo.png">
       <PackagePath>Assets\AppLogo.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\AppIcon.ico">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\AppIcon.ico">
       <PackagePath>Assets\AppIcon.ico</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\obj\x64\Debug\net8.0-windows10.0.19041.0\MailClient.App.dll">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\obj\x64\Debug\net8.0-windows10.0.19041.0\MailClient.App.dll">
       <PackagePath>MailClient.App.dll</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Kuba\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.57\lib\net8.0\Microsoft.Windows.SDK.NET.dll">
@@ -244,34 +244,34 @@
     <AppxPackagedFile Include="C:\Users\Kuba\.nuget\packages\microsoft.web.webview2\1.0.3179.45\runtimes\win-x64\native_uap\Microsoft.Web.WebView2.Core.dll">
       <PackagePath>Microsoft.Web.WebView2.Core.dll</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.Core\bin\x64\Debug\net8.0\MailClient.Core.dll">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.Core\bin\x64\Debug\net8.0\MailClient.Core.dll">
       <PackagePath>MailClient.Core.dll</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Kuba\.nuget\packages\microsoft.web.webview2\1.0.3179.45\lib_manual\net8.0-windows10.0.17763.0\Microsoft.Web.WebView2.Core.Projection.dll">
       <PackagePath>Microsoft.Web.WebView2.Core.Projection.dll</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\MailClient.App.deps.json">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\MailClient.App.deps.json">
       <PackagePath>MailClient.App.deps.json</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\LockScreenLogo.scale-200.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\SplashScreen.scale-200.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\SplashScreen.scale-200.png">
       <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\Square150x150Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\Square150x150Logo.scale-200.png">
       <PackagePath>Assets\Square150x150Logo.scale-200.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\Square44x44Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\Square44x44Logo.scale-200.png">
       <PackagePath>Assets\Square44x44Logo.scale-200.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\Square44x44Logo.targetsize-24_altform-unplated.png">
       <PackagePath>Assets\Square44x44Logo.targetsize-24_altform-unplated.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\StoreLogo.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\StoreLogo.png">
       <PackagePath>Assets\StoreLogo.png</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\Assets\Wide310x150Logo.scale-200.png">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\Assets\Wide310x150Logo.scale-200.png">
       <PackagePath>Assets\Wide310x150Logo.scale-200.png</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Kuba\.nuget\packages\communitytoolkit.winui.controls.segmented\8.2.251219\lib\net8.0-windows10.0.19041\CommunityToolkit.WinUI.Controls.Segmented.pri">
@@ -292,7 +292,7 @@
     <AppxPackagedFile Include="C:\Users\Kuba\.nuget\packages\microsoft.web.webview2\1.0.3179.45\build\..\lib\Microsoft.Web.WebView2.Core.winmd">
       <PackagePath>Microsoft.Web.WebView2.Core.winmd</PackagePath>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Dev\MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\resources.pri">
+    <AppxPackagedFile Include="C:\Dev\0x-MailClient\MailClient.App\bin\x64\Debug\net8.0-windows10.0.19041.0\resources.pri">
       <PackagePath>resources.pri</PackagePath>
     </AppxPackagedFile>
   </ItemGroup>

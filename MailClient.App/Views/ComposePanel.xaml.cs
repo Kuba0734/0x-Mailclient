@@ -44,9 +44,10 @@ public sealed partial class ComposePanel : UserControl
         _attachments.CollectionChanged += (_, _) =>
             AttachmentsScroller.Visibility = _attachments.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
-        AnimationHelper.EnableImplicitFade(CcRow, -6);
-        AnimationHelper.EnableImplicitFade(BccRow, -6);
-        AnimationHelper.EnableImplicitFade(AttachmentsScroller, 10);
+        Motion.ImplicitFade(CcRow, -6);
+        Motion.ImplicitFade(BccRow, -6);
+        Motion.ImplicitFade(AttachmentsScroller, 10);
+        Motion.SetOpacity(DropHint, 0);
 
         Card.Shadow = new Microsoft.UI.Xaml.Media.ThemeShadow();
         Card.Translation = new Vector3(0, 0, 48);
@@ -65,13 +66,13 @@ public sealed partial class ComposePanel : UserControl
         _canSaveDraft = canSaveDraft;
 
         TitleText.Text = request.Title;
-        HeaderGlyph.Glyph = request.Title switch
+        Svg.SetKind(HeaderIcon, request.Title switch
         {
-            "Weiterleiten" => "",
-            "Antworten" => "",
-            "Allen antworten" => "",
-            _ => ""
-        };
+            "Weiterleiten" => "forward",
+            "Antworten" => "reply",
+            "Allen antworten" => "reply-all",
+            _ => "compose"
+        });
 
         FromCombo.ItemsSource = _accounts.Select(a => $"{a.Name} <{a.EmailAddress}>").ToList();
         FromCombo.SelectedIndex = Math.Max(0, _accounts.FindIndex(a => a.Id == current.Id));
@@ -168,7 +169,7 @@ public sealed partial class ComposePanel : UserControl
             string.IsNullOrWhiteSpace(BccBox.Text))
         {
             ShowError("Bitte mindestens einen Empfänger angeben.");
-            AnimationHelper.Shake(ToBox);
+            Motion.Shake(ToBox);
             ToBox.Focus(FocusState.Programmatic);
             return;
         }
@@ -359,14 +360,14 @@ public sealed partial class ComposePanel : UserControl
         if (!e.DataView.Contains(StandardDataFormats.StorageItems)) return;
         e.AcceptedOperation = DataPackageOperation.Copy;
         e.DragUIOverride.Caption = "Anhängen";
-        DropHint.Opacity = 1;
+        Motion.FadeTo(DropHint, 1);
     }
 
-    private void Card_DragLeave(object sender, DragEventArgs e) => DropHint.Opacity = 0;
+    private void Card_DragLeave(object sender, DragEventArgs e) => Motion.FadeTo(DropHint, 0);
 
     private async void Card_Drop(object sender, DragEventArgs e)
     {
-        DropHint.Opacity = 0;
+        Motion.FadeTo(DropHint, 0);
         if (!e.DataView.Contains(StandardDataFormats.StorageItems)) return;
         var deferral = e.GetDeferral();
         try

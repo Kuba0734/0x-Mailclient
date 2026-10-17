@@ -7,6 +7,7 @@
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
     xmlns:views="using:MailClient.App.Views"
     Background="Transparent"
+    FontFamily="{StaticResource AppFont}"
     KeyboardAcceleratorPlacementMode="Hidden">
 
     <Page.KeyboardAccelerators>
@@ -29,8 +30,8 @@
         <Grid x:ConnectionId='10'
             x:Name="Sidebar"
             Width="260"
-            Padding="12,4,12,12"
-            RowSpacing="10">
+            Padding="16,4,16,16"
+            RowSpacing="{StaticResource SpaceMd}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -38,78 +39,76 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Button x:ConnectionId='102'
+            <Button x:ConnectionId='98'
                 x:Name="ComposeButton"
-                Height="50"
+                Height="46"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
-                Padding="15,0"
+                Padding="14,0"
+                helpers:Motion.HoverLift="True"
                                      
-                Style="{StaticResource GradientButtonStyle}"
+                Style="{StaticResource PrimaryButtonStyle}"
                 ToolTipService.ToolTip="Neue E-Mail (Strg+N)">
-                <StackPanel Orientation="Horizontal" Spacing="14">
-                    <FontIcon FontSize="16" Glyph="&#xE70F;" />
-                    <TextBlock x:ConnectionId='122'
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceMd}">
+                    <ImageIcon helpers:Svg.Kind="compose" helpers:Svg.Tone="OnAccent" />
+                    <TextBlock x:ConnectionId='118'
                         x:Name="ComposeLabel"
                         VerticalAlignment="Center"
                         Text="Neue E-Mail" />
                 </StackPanel>
             </Button>
 
-            <ListView x:ConnectionId='103'
+            <ListView x:ConnectionId='99'
                 x:Name="FolderList"
                 Grid.Row="1"
-                Margin="-8,6,-8,0"
+                Margin="-8,8,-8,0"
                 IsItemClickEnabled="True"
                                                 
                 SelectionMode="Single">
-                <ListView.ItemContainerTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition FromHorizontalOffset="-24" IsStaggeringEnabled="True" />
-                    </TransitionCollection>
-                </ListView.ItemContainerTransitions>
                 <ListView.ItemTemplate>
                     <DataTemplate                                >
-                        <Grid x:ConnectionId='116'
-                            Height="40"
-                            ColumnSpacing="16"
+                        <Grid x:ConnectionId='112'
+                            Height="38"
+                            ColumnSpacing="{StaticResource SpaceLg}"
                                                                        >
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="18" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <FontIcon x:ConnectionId='117'
+                            <ImageIcon x:ConnectionId='113'
+                                Width="18"
+                                Height="18"
                                 VerticalAlignment="Center"
-                                FontSize="16"
-                                                       />
-                            <Ellipse x:ConnectionId='118'
-                                Width="8"
-                                Height="8"
+                                                                
+                                helpers:Svg.Tone="Secondary" />
+                            <Ellipse x:ConnectionId='114'
+                                Width="7"
+                                Height="7"
                                 Margin="0,6,-4,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
-                                Fill="{StaticResource BrandGradientBrush}"
+                                Fill="{StaticResource AccentBrush}"
                                                                                  />
-                            <TextBlock x:ConnectionId='119'
+                            <TextBlock x:ConnectionId='115'
                                 Grid.Column="1"
                                 VerticalAlignment="Center"
+                                FontSize="{StaticResource FontSizeBase}"
                                                     
                                 TextTrimming="CharacterEllipsis"
                                                                                    />
-                            <Border x:ConnectionId='120'
+                            <Border x:ConnectionId='116'
                                 Grid.Column="2"
-                                MinWidth="24"
-                                Padding="7,2"
+                                MinWidth="22"
+                                Padding="7,1"
                                 VerticalAlignment="Center"
-                                Background="{StaticResource BrandGradientBrush}"
-                                CornerRadius="10"
+                                Background="{StaticResource AccentSoftBrush}"
+                                CornerRadius="{StaticResource RadiusPill}"
                                                                                  >
-                                <TextBlock x:ConnectionId='121'
+                                <TextBlock x:ConnectionId='117'
                                     HorizontalAlignment="Center"
-                                    FontSize="11"
+                                    FontSize="{StaticResource FontSizeXs}"
                                     FontWeight="SemiBold"
-                                    Foreground="White"
                                                                            />
                             </Border>
                         </Grid>
@@ -118,99 +117,102 @@
             </ListView>
 
             <!--  Account switcher  -->
-            <Button x:ConnectionId='104'
+            <Button x:ConnectionId='100'
                 x:Name="AccountButton"
                 Grid.Row="2"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
                 Padding="6"
-                Style="{StaticResource ToolbarButtonStyle}">
-                <Grid ColumnSpacing="12">
+                Style="{StaticResource GhostButtonStyle}">
+                <Grid ColumnSpacing="{StaticResource SpaceMd}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="36" />
+                        <ColumnDefinition Width="34" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Border x:ConnectionId='108'
+                    <Border x:ConnectionId='104'
                         x:Name="AccountAvatar"
-                        Width="36"
-                        Height="36"
-                        Background="{StaticResource BrandGradientBrush}"
-                        CornerRadius="18">
-                        <TextBlock x:ConnectionId='113'
+                        Width="34"
+                        Height="34"
+                        CornerRadius="17"
+                        Style="{StaticResource AvatarStyle}">
+                        <TextBlock x:ConnectionId='109'
                             x:Name="AccountInitials"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            FontSize="13"
+                            FontSize="{StaticResource FontSizeSm}"
                             FontWeight="SemiBold"
-                            Foreground="White"
                             Text="+" />
                     </Border>
-                    <StackPanel x:ConnectionId='109'
+                    <StackPanel x:ConnectionId='105'
                         x:Name="AccountTextPanel"
                         Grid.Column="1"
                         VerticalAlignment="Center">
-                        <TextBlock x:ConnectionId='111'
+                        <TextBlock x:ConnectionId='107'
                             x:Name="AccountNameText"
+                            FontSize="{StaticResource FontSizeMd}"
                             FontWeight="SemiBold"
                             Text="Kein Konto"
                             TextTrimming="CharacterEllipsis" />
-                        <TextBlock x:ConnectionId='112'
+                        <TextBlock x:ConnectionId='108'
                             x:Name="AccountMailText"
-                            FontSize="12"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            FontSize="{StaticResource FontSizeXs}"
+                            Foreground="{StaticResource TextSecondaryBrush}"
                             Text="Konto hinzufügen"
                             TextTrimming="CharacterEllipsis" />
                     </StackPanel>
-                    <FontIcon x:ConnectionId='110'
+                    <ImageIcon x:ConnectionId='106'
                         x:Name="AccountChevron"
                         Grid.Column="2"
-                        FontSize="12"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        Glyph="&#xE70E;" />
+                        Width="12"
+                        Height="12"
+                        helpers:Svg.Kind="chevron-up"
+                        helpers:Svg.Tone="Secondary" />
                 </Grid>
                 <Button.Flyout>
-                    <MenuFlyout x:ConnectionId='114' x:Name="AccountMenu" Placement="TopEdgeAlignedLeft" />
+                    <MenuFlyout x:ConnectionId='110' x:Name="AccountMenu" Placement="TopEdgeAlignedLeft" />
                 </Button.Flyout>
             </Button>
 
-            <Button x:ConnectionId='105'
+            <Button x:ConnectionId='101'
                 x:Name="SettingsButton"
                 Grid.Row="3"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
-                Padding="14,10"
+                Padding="12,9"
                                       
-                Style="{StaticResource ToolbarButtonStyle}">
-                <StackPanel Orientation="Horizontal" Spacing="16">
-                    <FontIcon x:ConnectionId='106' x:Name="SettingsIcon" FontSize="16" Glyph="&#xE713;" />
-                    <TextBlock x:ConnectionId='107' x:Name="SettingsLabel" Text="Einstellungen" />
+                Style="{StaticResource GhostButtonStyle}">
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceLg}">
+                    <ImageIcon x:ConnectionId='102'
+                        x:Name="SettingsIcon"
+                        Width="18"
+                        Height="18"
+                        helpers:Svg.Kind="settings"
+                        helpers:Svg.Tone="Secondary" />
+                    <TextBlock x:ConnectionId='103' x:Name="SettingsLabel" Text="Einstellungen" />
                 </StackPanel>
             </Button>
         </Grid>
 
-        <!--  ════════════════ CONTENT LAYER ════════════════  -->
+        <!--  ════════════════ CONTENT LAYER (glass panel) ════════════════  -->
         <Grid x:ConnectionId='11'
             x:Name="ContentLayer"
             Grid.Column="1"
-            Background="{ThemeResource LayerFillColorDefaultBrush}"
-            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            Background="{StaticResource PanelBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
             BorderThickness="1,1,0,0"
-            CornerRadius="12,0,0,0">
+            CornerRadius="{StaticResource RadiusLayer}">
 
-            <Grid x:ConnectionId='18' x:Name="MailArea">
+            <Grid x:ConnectionId='19' x:Name="MailArea">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition x:ConnectionId='21'
-                        x:Name="ListColumnDef"
-                        Width="400"
-                        MinWidth="300" />
+                    <ColumnDefinition Width="400" MinWidth="300" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!--  ── Message list ──  -->
                 <Grid x:ConnectionId='22'
                     x:Name="ListColumn"
-                    BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                    BorderBrush="{StaticResource BorderBrush}"
                     BorderThickness="0,0,1,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -219,37 +221,37 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid Padding="22,18,12,4">
-                        <StackPanel x:ConnectionId='97' x:Name="FolderHeader">
-                            <TextBlock x:ConnectionId='100'
+                    <Grid Padding="24,22,14,4">
+                        <StackPanel x:ConnectionId='93' x:Name="FolderHeader">
+                            <TextBlock x:ConnectionId='96'
                                 x:Name="FolderTitle"
-                                FontSize="26"
+                                FontSize="{StaticResource FontSize2Xl}"
                                 FontWeight="SemiBold"
                                 Text="Posteingang"
                                 TextTrimming="CharacterEllipsis" />
-                            <TextBlock x:ConnectionId='101'
+                            <TextBlock x:ConnectionId='97'
                                 x:Name="FolderSubtitle"
-                                Margin="0,2,0,0"
-                                FontSize="12"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="" />
+                                Margin="0,4,0,0"
+                                FontSize="{StaticResource FontSizeSm}"
+                                Foreground="{StaticResource TextSecondaryBrush}" />
                         </StackPanel>
                         <Button
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
+                            helpers:Motion.HoverLift="True"
                             Style="{StaticResource IconButtonStyle}"
                             ToolTipService.ToolTip="Weitere Aktionen">
-                            <FontIcon FontSize="14" Glyph="&#xE712;" />
+                            <ImageIcon helpers:Svg.Kind="more" helpers:Svg.Tone="Secondary" />
                             <Button.Flyout>
                                 <MenuFlyout Placement="BottomEdgeAlignedRight">
-                                    <MenuFlyoutItem x:ConnectionId='98'                           Text="Alle als gelesen markieren">
+                                    <MenuFlyoutItem x:ConnectionId='94'                           Text="Alle als gelesen markieren">
                                         <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xE8C3;" />
+                                            <ImageIcon helpers:Svg.Kind="mail-open" />
                                         </MenuFlyoutItem.Icon>
                                     </MenuFlyoutItem>
-                                    <MenuFlyoutItem x:ConnectionId='99'                      Text="Ordner neu laden">
+                                    <MenuFlyoutItem x:ConnectionId='95'                      Text="Ordner neu laden">
                                         <MenuFlyoutItem.Icon>
-                                            <FontIcon Glyph="&#xE72C;" />
+                                            <ImageIcon helpers:Svg.Kind="refresh" />
                                         </MenuFlyoutItem.Icon>
                                     </MenuFlyoutItem>
                                 </MenuFlyout>
@@ -257,10 +259,10 @@
                         </Button>
                     </Grid>
 
-                    <toolkit:Segmented x:ConnectionId='64'
+                    <toolkit:Segmented x:ConnectionId='60'
                         x:Name="FilterSegmented"
                         Grid.Row="1"
-                        Margin="16,8,16,10"
+                        Margin="20,12,20,12"
                         HorizontalAlignment="Stretch"
                         SelectedIndex="0"
                                                                   >
@@ -269,224 +271,241 @@
                         <toolkit:SegmentedItem Content="Markiert" />
                     </toolkit:Segmented>
 
-                    <InfoBar x:ConnectionId='65'
+                    <InfoBar x:ConnectionId='61'
                         x:Name="MailInfoBar"
                         Grid.Row="2"
-                        Margin="12,0,12,8"
+                        Margin="16,0,16,8"
+                        CornerRadius="{StaticResource RadiusMd}"
                         IsClosable="True"
                         IsOpen="False" />
 
                     <Grid Grid.Row="3">
-                        <!--  Skeleton loading  -->
-                        <ItemsControl x:ConnectionId='66'
-                            x:Name="SkeletonList"
-                            Padding="14,4"
+                        <!--  Skeleton + shimmer  -->
+                        <Grid x:ConnectionId='62'
+                            x:Name="SkeletonHost"
                             IsHitTestVisible="False"
+                                                                  
                             Visibility="Collapsed">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Padding="8,12" ColumnSpacing="12">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="40" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Ellipse
-                                            Width="40"
-                                            Height="40"
-                                            VerticalAlignment="Top"
-                                            Fill="{ThemeResource SkeletonBrush}" />
-                                        <StackPanel Grid.Column="1" Spacing="8">
-                                            <Rectangle
-                                                Width="140"
-                                                Height="12"
-                                                HorizontalAlignment="Left"
-                                                Fill="{ThemeResource SkeletonBrush}"
-                                                RadiusX="6"
-                                                RadiusY="6" />
-                                            <Rectangle
-                                                Height="10"
-                                                Margin="0,0,40,0"
-                                                Fill="{ThemeResource SkeletonBrush}"
-                                                RadiusX="5"
-                                                RadiusY="5" />
-                                            <Rectangle
-                                                Height="10"
-                                                Margin="0,0,90,0"
-                                                Fill="{ThemeResource SkeletonBrush}"
-                                                RadiusX="5"
-                                                RadiusY="5" />
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                            <ItemsControl x:ConnectionId='90' x:Name="SkeletonList" Padding="16,4">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="{StaticResource PadListItem}" ColumnSpacing="{StaticResource SpaceMd}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="38" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Ellipse
+                                                Width="38"
+                                                Height="38"
+                                                VerticalAlignment="Top"
+                                                Fill="{StaticResource SkeletonBrush}" />
+                                            <StackPanel Grid.Column="1" Spacing="9">
+                                                <Rectangle
+                                                    Width="140"
+                                                    Height="11"
+                                                    HorizontalAlignment="Left"
+                                                    Fill="{StaticResource SkeletonBrush}"
+                                                    RadiusX="5"
+                                                    RadiusY="5" />
+                                                <Rectangle
+                                                    Height="9"
+                                                    Margin="0,0,40,0"
+                                                    Fill="{StaticResource SkeletonBrush}"
+                                                    RadiusX="4"
+                                                    RadiusY="4" />
+                                                <Rectangle
+                                                    Height="9"
+                                                    Margin="0,0,90,0"
+                                                    Fill="{StaticResource SkeletonBrush}"
+                                                    RadiusX="4"
+                                                    RadiusY="4" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Rectangle x:ConnectionId='91'
+                                x:Name="ShimmerBar"
+                                Width="220"
+                                HorizontalAlignment="Left"
+                                Fill="{StaticResource ShimmerBrush}" />
+                        </Grid>
 
                         <!--  Empty state  -->
-                        <StackPanel x:ConnectionId='67'
+                        <StackPanel x:ConnectionId='63'
                             x:Name="EmptyPanel"
-                            Padding="24"
+                            Padding="{StaticResource PadXl}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Spacing="10"
+                            Spacing="{StaticResource SpaceSm}"
                             Visibility="Collapsed">
-                            <Grid x:ConnectionId='92'
-                                x:Name="EmptyIllustration"
-                                Width="96"
-                                Height="96"
-                                Margin="0,0,0,8">
-                                <Ellipse Fill="{StaticResource BrandGradientSoftBrush}" />
-                                <FontIcon x:ConnectionId='95'
-                                    x:Name="EmptyGlyph"
-                                    FontSize="36"
-                                    Foreground="{ThemeResource BrandTextBrush}"
-                                    Glyph="&#xE8B7;" />
-                            </Grid>
-                            <TextBlock x:ConnectionId='93'
+                            <Border
+                                Width="72"
+                                Height="72"
+                                Margin="0,0,0,12"
+                                CornerRadius="36"
+                                Style="{StaticResource PanelStyle}">
+                                <ImageIcon x:ConnectionId='89'
+                                    x:Name="EmptyIcon"
+                                    Width="28"
+                                    Height="28"
+                                    helpers:Svg.Kind="check"
+                                    helpers:Svg.Tone="Secondary" />
+                            </Border>
+                            <TextBlock x:ConnectionId='87'
                                 x:Name="EmptyTitle"
                                 HorizontalAlignment="Center"
-                                FontSize="17"
+                                FontSize="{StaticResource FontSizeLg}"
                                 FontWeight="SemiBold"
-                                Text="Alles erledigt!" />
-                            <TextBlock x:ConnectionId='94'
+                                Text="Alles erledigt" />
+                            <TextBlock x:ConnectionId='88'
                                 x:Name="EmptySubtitle"
                                 MaxWidth="260"
                                 HorizontalAlignment="Center"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="Hier gibt es keine E-Mails."
+                                Foreground="{StaticResource TextSecondaryBrush}"
                                 TextAlignment="Center"
                                 TextWrapping="Wrap" />
                         </StackPanel>
 
                         <!--  No account  -->
-                        <StackPanel x:ConnectionId='68'
+                        <StackPanel x:ConnectionId='64'
                             x:Name="NoAccountPanel"
-                            Padding="24"
+                            Padding="{StaticResource PadXl}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Spacing="10"
+                            Spacing="{StaticResource SpaceSm}"
                             Visibility="Collapsed">
-                            <Grid x:ConnectionId='90'
-                                x:Name="WelcomeIllustration"
-                                Width="110"
-                                Height="110"
-                                Margin="0,0,0,10">
-                                <Ellipse Fill="{StaticResource BrandGradientSoftBrush}" />
-                                <Ellipse
-                                    Width="72"
-                                    Height="72"
-                                    Fill="{StaticResource BrandGradientBrush}" />
-                                <FontIcon
-                                    FontSize="30"
-                                    Foreground="White"
-                                    Glyph="&#xE715;" />
-                            </Grid>
+                            <Border
+                                Width="84"
+                                Height="84"
+                                Margin="0,0,0,16"
+                                CornerRadius="42"
+                                Style="{StaticResource PanelStyle}">
+                                <ImageIcon
+                                    Width="32"
+                                    Height="32"
+                                    helpers:Svg.Kind="mail" />
+                            </Border>
                             <TextBlock
                                 HorizontalAlignment="Center"
-                                FontSize="20"
+                                FontSize="{StaticResource FontSizeXl}"
                                 FontWeight="SemiBold"
                                 Text="Willkommen bei Mail" />
                             <TextBlock
                                 MaxWidth="280"
                                 HorizontalAlignment="Center"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Foreground="{StaticResource TextSecondaryBrush}"
                                 Text="Füge dein erstes E-Mail-Konto hinzu, um loszulegen."
                                 TextAlignment="Center"
                                 TextWrapping="Wrap" />
-                            <Button x:ConnectionId='91'
-                                Margin="0,12,0,0"
+                            <Button x:ConnectionId='86'
+                                Margin="0,20,0,0"
                                 HorizontalAlignment="Center"
+                                helpers:Motion.HoverLift="True"
                                                         
-                                Style="{StaticResource GradientButtonStyle}">
-                                <StackPanel Orientation="Horizontal" Spacing="10">
-                                    <FontIcon FontSize="14" Glyph="&#xE710;" />
+                                Style="{StaticResource PrimaryButtonStyle}">
+                                <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceSm}">
+                                    <ImageIcon helpers:Svg.Kind="plus" helpers:Svg.Tone="OnAccent" />
                                     <TextBlock Text="Konto hinzufügen" />
                                 </StackPanel>
                             </Button>
                         </StackPanel>
 
                         <!--  Mail list  -->
-                        <ListView x:ConnectionId='69'
+                        <ListView x:ConnectionId='65'
                             x:Name="MailList"
-                            Padding="0,0,0,12"
+                            Padding="0,0,0,16"
+                                                                                        
                             IsItemClickEnabled="False"
                                                       
                                                                         
                             SelectionMode="Single">
+                            <ListView.Resources>
+                                <!--  Hover is drawn by the item itself (lift + glow)  -->
+                                <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="Transparent" />
+                                <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="Transparent" />
+                            </ListView.Resources>
                             <ListView.ItemContainerStyle>
                                 <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
                                     <Setter Property="Padding" Value="0" />
-                                    <Setter Property="Margin" Value="8,1" />
-                                    <Setter Property="CornerRadius" Value="10" />
+                                    <Setter Property="Margin" Value="10,2" />
+                                    <Setter Property="CornerRadius" Value="{StaticResource RadiusMd}" />
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 </Style>
                             </ListView.ItemContainerStyle>
                             <ListView.ItemContainerTransitions>
                                 <TransitionCollection>
-                                    <EntranceThemeTransition FromVerticalOffset="48" IsStaggeringEnabled="True" />
-                                    <AddDeleteThemeTransition />
                                     <RepositionThemeTransition />
                                 </TransitionCollection>
                             </ListView.ItemContainerTransitions>
                             <ListView.ItemTemplate>
                                 <DataTemplate                                >
-                                    <Grid x:ConnectionId='71'
-                                        Padding="10,12,12,12"
+                                    <Grid x:ConnectionId='67'
+                                        Padding="{StaticResource PadListItem}"
+                                        helpers:Motion.HoverLift="True"
                                         Background="Transparent"
-                                        ColumnSpacing="12"
+                                        ColumnSpacing="{StaticResource SpaceMd}"
                                                                                 
                                                                               >
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="40" />
+                                            <ColumnDefinition Width="38" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
+                                        <!--  Hover glow (no blur on list items)  -->
+                                        <Border
+                                            x:Name="HoverGlow"
+                                            Grid.ColumnSpan="2"
+                                            Margin="-12,-12,-14,-12"
+                                            Background="{StaticResource PanelHoverBrush}"
+                                            BorderBrush="{StaticResource BorderStrongBrush}"
+                                            BorderThickness="{StaticResource BorderHairline}"
+                                            CornerRadius="{StaticResource RadiusMd}"
+                                            Opacity="0" />
+
                                         <Grid
-                                            Width="40"
-                                            Height="40"
+                                            Width="38"
+                                            Height="38"
                                             VerticalAlignment="Top">
-                                            <Border x:ConnectionId='84'                                                            CornerRadius="20">
-                                                <TextBlock x:ConnectionId='86'
+                                            <Border CornerRadius="19" Style="{StaticResource AvatarStyle}">
+                                                <TextBlock x:ConnectionId='82'
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Center"
-                                                    FontSize="14"
+                                                    FontSize="{StaticResource FontSizeMd}"
                                                     FontWeight="SemiBold"
-                                                    Foreground="White"
                                                                                                       />
                                             </Border>
-                                            <Ellipse x:ConnectionId='85'
-                                                Width="13"
-                                                Height="13"
+                                            <Ellipse x:ConnectionId='81'
+                                                Width="11"
+                                                Height="11"
                                                 Margin="0,-2,-3,0"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Top"
-                                                Fill="{StaticResource BrandGradientBrush}"
-                                                Stroke="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+                                                Fill="{StaticResource AccentBrush}"
+                                                Stroke="{StaticResource OnAccentBrush}"
                                                 StrokeThickness="2"
                                                                                                               />
                                         </Grid>
 
-                                        <StackPanel x:ConnectionId='72'
+                                        <StackPanel x:ConnectionId='69'
                                             Grid.Column="1"
                                                                                                            
-                                            Spacing="2">
-                                            <StackPanel.OpacityTransition>
-                                                <ScalarTransition />
-                                            </StackPanel.OpacityTransition>
-                                            <Grid ColumnSpacing="8">
+                                            Spacing="3">
+                                            <Grid ColumnSpacing="{StaticResource SpaceSm}">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock x:ConnectionId='82'
-                                                    FontSize="14"
+                                                <TextBlock x:ConnectionId='79'
+                                                    FontSize="{StaticResource FontSizeBase}"
                                                                                                                  
                                                                                
                                                     TextTrimming="CharacterEllipsis" />
-                                                <TextBlock x:ConnectionId='83'
+                                                <TextBlock x:ConnectionId='80'
                                                     Grid.Column="1"
                                                     VerticalAlignment="Center"
-                                                    FontSize="12"
-                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    FontSize="{StaticResource FontSizeXs}"
+                                                    Foreground="{StaticResource TextSecondaryBrush}"
                                                                                                />
                                             </Grid>
                                             <Grid ColumnSpacing="6">
@@ -494,8 +513,8 @@
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock x:ConnectionId='79'
-                                                    FontSize="13"
+                                                <TextBlock x:ConnectionId='76'
+                                                    FontSize="{StaticResource FontSizeMd}"
                                                                                                                  
                                                                            
                                                     TextTrimming="CharacterEllipsis" />
@@ -503,21 +522,22 @@
                                                     Grid.Column="1"
                                                     Orientation="Horizontal"
                                                     Spacing="6">
-                                                    <FontIcon x:ConnectionId='80'
-                                                        FontSize="12"
-                                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                                        Glyph="&#xE723;"
+                                                    <ImageIcon x:ConnectionId='77'
+                                                        Width="12"
+                                                        Height="12"
+                                                        helpers:Svg.Kind="paperclip"
+                                                        helpers:Svg.Tone="Secondary"
                                                                                                               />
-                                                    <FontIcon x:ConnectionId='81'
-                                                        FontSize="12"
-                                                        Foreground="{StaticResource FlagBrush}"
-                                                        Glyph="&#xE7C1;"
+                                                    <ImageIcon x:ConnectionId='78'
+                                                        Width="12"
+                                                        Height="12"
+                                                        helpers:Svg.Kind="flag"
                                                                                                                       />
                                                 </StackPanel>
                                             </Grid>
-                                            <TextBlock x:ConnectionId='78'
-                                                FontSize="12"
-                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            <TextBlock x:ConnectionId='75'
+                                                FontSize="{StaticResource FontSizeSm}"
+                                                Foreground="{StaticResource TextSecondaryBrush}"
                                                 MaxLines="2"
                                                                        
                                                 TextTrimming="CharacterEllipsis"
@@ -525,65 +545,77 @@
                                         </StackPanel>
 
                                         <!--  Hover quick actions  -->
-                                        <StackPanel
+                                        <StackPanel x:ConnectionId='70'
                                             x:Name="HoverActions"
                                             Grid.Column="1"
                                             Margin="0,-6,-6,0"
                                             Padding="2"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
-                                            Background="{ThemeResource HoverActionsBackground}"
-                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                                            BorderThickness="1"
-                                            CornerRadius="8"
+                                            Background="{StaticResource ToastBrush}"
+                                            BorderBrush="{StaticResource BorderBrush}"
+                                            BorderThickness="{StaticResource BorderHairline}"
+                                            CornerRadius="{StaticResource RadiusSm}"
                                             IsHitTestVisible="False"
-                                            Opacity="0"
+                                                                        
                                             Orientation="Horizontal"
                                             Spacing="2">
-                                            <StackPanel.OpacityTransition>
-                                                <ScalarTransition Duration="0:0:0.15" />
-                                            </StackPanel.OpacityTransition>
-                                            <Button x:ConnectionId='74'
+                                            <Button x:ConnectionId='71'
                                                                        
                                                 Style="{StaticResource SmallIconButtonStyle}"
                                                               
                                                                                                                             >
-                                                <FontIcon x:ConnectionId='77' FontSize="13"                                                             />
+                                                <ImageIcon x:ConnectionId='74'
+                                                    Width="14"
+                                                    Height="14"
+                                                                                                                          />
                                             </Button>
-                                            <Button x:ConnectionId='75'
+                                            <Button x:ConnectionId='72'
                                                                        
                                                 Style="{StaticResource SmallIconButtonStyle}"
                                                               
                                                                                                                                >
-                                                <FontIcon FontSize="13" Glyph="&#xE7C1;" />
+                                                <ImageIcon
+                                                    Width="14"
+                                                    Height="14"
+                                                    helpers:Svg.Kind="flag" />
                                             </Button>
-                                            <Button x:ConnectionId='76'
+                                            <Button x:ConnectionId='73'
                                                                          
                                                 Style="{StaticResource SmallIconButtonStyle}"
                                                               
                                                 ToolTipService.ToolTip="Löschen">
-                                                <FontIcon
-                                                    FontSize="13"
-                                                    Foreground="{StaticResource DangerBrush}"
-                                                    Glyph="&#xE74D;" />
+                                                <ImageIcon
+                                                    Width="14"
+                                                    Height="14"
+                                                    helpers:Svg.Kind="trash"
+                                                    helpers:Svg.Tone="Danger" />
                                             </Button>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <ListView.Footer>
-                                <Grid x:ConnectionId='87' x:Name="LoadMorePanel" Padding="16,10" Visibility="Collapsed">
-                                    <Button x:ConnectionId='88'
+                                <Grid x:ConnectionId='83'
+                                    x:Name="LoadMorePanel"
+                                    Padding="16,12"
+                                    Visibility="Collapsed">
+                                    <Button x:ConnectionId='84'
                                         x:Name="LoadMoreButton"
                                         HorizontalAlignment="Center"
+                                        helpers:Motion.HoverLift="True"
                                                               
-                                        Style="{StaticResource ToolbarButtonStyle}">
-                                        <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <FontIcon FontSize="12" Glyph="&#xE74B;" />
+                                        Style="{StaticResource GhostButtonStyle}">
+                                        <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceSm}">
+                                            <ImageIcon
+                                                Width="14"
+                                                Height="14"
+                                                helpers:Svg.Kind="arrow-down"
+                                                helpers:Svg.Tone="Secondary" />
                                             <TextBlock Text="Ältere E-Mails laden" />
                                         </StackPanel>
                                     </Button>
-                                    <ProgressRing x:ConnectionId='89'
+                                    <ProgressRing x:ConnectionId='85'
                                         x:Name="LoadMoreRing"
                                         Width="22"
                                         Height="22"
@@ -601,34 +633,27 @@
                         x:Name="ReaderEmpty"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Spacing="10">
-                        <Grid x:ConnectionId='63'
-                            x:Name="ReaderIllustration"
-                            Width="150"
-                            Height="150"
-                            Margin="0,0,0,14">
-                            <Ellipse Fill="{StaticResource BrandGradientSoftBrush}" />
-                            <Ellipse
-                                Width="104"
-                                Height="104"
-                                Fill="{StaticResource BrandGradientSoftBrush}" />
-                            <Ellipse
-                                Width="66"
-                                Height="66"
-                                Fill="{StaticResource BrandGradientBrush}" />
-                            <FontIcon
-                                FontSize="28"
-                                Foreground="White"
-                                Glyph="&#xE8C3;" />
-                        </Grid>
+                        Spacing="{StaticResource SpaceSm}">
+                        <Border
+                            Width="96"
+                            Height="96"
+                            Margin="0,0,0,16"
+                            CornerRadius="48"
+                            Style="{StaticResource PanelStyle}">
+                            <ImageIcon
+                                Width="34"
+                                Height="34"
+                                helpers:Svg.Kind="mail-open"
+                                helpers:Svg.Tone="Secondary" />
+                        </Border>
                         <TextBlock
                             HorizontalAlignment="Center"
-                            FontSize="20"
+                            FontSize="{StaticResource FontSizeXl}"
                             FontWeight="SemiBold"
                             Text="Keine E-Mail ausgewählt" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{StaticResource TextSecondaryBrush}"
                             Text="Wähle links eine Nachricht aus, um sie hier zu lesen." />
                     </StackPanel>
 
@@ -641,42 +666,46 @@
                         </Grid.RowDefinitions>
 
                         <!--  Toolbar  -->
-                        <Grid Padding="16,10,16,4">
-                            <StackPanel Orientation="Horizontal" Spacing="2">
-                                <Button x:ConnectionId='57'
+                        <Grid Padding="20,12,20,4">
+                            <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceXs}">
+                                <Button x:ConnectionId='56'
+                                    helpers:Motion.HoverLift="True"
                                                        
-                                    Style="{StaticResource ToolbarButtonStyle}"
+                                    Style="{StaticResource GhostButtonStyle}"
                                     ToolTipService.ToolTip="Antworten (Strg+R)">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <FontIcon FontSize="14" Glyph="&#xE8CA;" />
+                                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceSm}">
+                                        <ImageIcon helpers:Svg.Kind="reply" />
                                         <TextBlock Text="Antworten" />
                                     </StackPanel>
                                 </Button>
-                                <Button x:ConnectionId='58'
+                                <Button x:ConnectionId='57'
+                                    helpers:Motion.HoverLift="True"
                                                           
-                                    Style="{StaticResource ToolbarButtonStyle}"
+                                    Style="{StaticResource GhostButtonStyle}"
                                     ToolTipService.ToolTip="Allen antworten (Strg+Umschalt+R)">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <FontIcon FontSize="14" Glyph="&#xE8C2;" />
-                                        <TextBlock x:ConnectionId='62' x:Name="ReplyAllLabel" Text="Allen antworten" />
+                                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceSm}">
+                                        <ImageIcon helpers:Svg.Kind="reply-all" />
+                                        <TextBlock Text="Allen antworten" />
+                                    </StackPanel>
+                                </Button>
+                                <Button x:ConnectionId='58'
+                                    helpers:Motion.HoverLift="True"
+                                                         
+                                    Style="{StaticResource GhostButtonStyle}"
+                                    ToolTipService.ToolTip="Weiterleiten (Strg+L)">
+                                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceSm}">
+                                        <ImageIcon helpers:Svg.Kind="forward" />
+                                        <TextBlock Text="Weiterleiten" />
                                     </StackPanel>
                                 </Button>
                                 <Button x:ConnectionId='59'
-                                                         
-                                    Style="{StaticResource ToolbarButtonStyle}"
-                                    ToolTipService.ToolTip="Weiterleiten (Strg+L)">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <FontIcon FontSize="14" Glyph="&#xE89C;" />
-                                        <TextBlock x:ConnectionId='61' x:Name="ForwardLabel" Text="Weiterleiten" />
-                                    </StackPanel>
-                                </Button>
-                                <Button x:ConnectionId='60'
                                     x:Name="EditDraftButton"
+                                    helpers:Motion.HoverLift="True"
                                                            
-                                    Style="{StaticResource ToolbarButtonStyle}"
+                                    Style="{StaticResource GhostButtonStyle}"
                                     Visibility="Collapsed">
-                                    <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <FontIcon FontSize="14" Glyph="&#xE70F;" />
+                                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceSm}">
+                                        <ImageIcon helpers:Svg.Kind="edit" />
                                         <TextBlock Text="Entwurf bearbeiten" />
                                     </StackPanel>
                                 </Button>
@@ -686,51 +715,52 @@
                                 HorizontalAlignment="Right"
                                 Orientation="Horizontal"
                                 Spacing="2">
-                                <Button x:ConnectionId='49'
+                                <Button x:ConnectionId='48'
                                     x:Name="ToggleReadButton"
+                                    helpers:Motion.HoverLift="True"
                                                             
-                                    Style="{StaticResource IconButtonStyle}"
-                                    ToolTipService.ToolTip="Als ungelesen markieren (Strg+Q)">
-                                    <FontIcon x:ConnectionId='56'
-                                        x:Name="ToggleReadIcon"
-                                        FontSize="15"
-                                        Glyph="&#xE715;" />
+                                    Style="{StaticResource IconButtonStyle}">
+                                    <ImageIcon x:ConnectionId='55' x:Name="ToggleReadIcon" helpers:Svg.Kind="mail" />
+                                </Button>
+                                <Button x:ConnectionId='49'
+                                    x:Name="FlagButton"
+                                    helpers:Motion.HoverLift="True"
+                                                      
+                                    Style="{StaticResource IconButtonStyle}">
+                                    <Grid>
+                                        <ImageIcon helpers:Svg.Kind="flag" helpers:Svg.Tone="Secondary" />
+                                        <Ellipse x:ConnectionId='54'
+                                            x:Name="FlagDot"
+                                            Width="6"
+                                            Height="6"
+                                            Margin="0,-3,-4,0"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Fill="{StaticResource AccentBrush}"
+                                            Visibility="Collapsed" />
+                                    </Grid>
                                 </Button>
                                 <Button x:ConnectionId='50'
-                                    x:Name="FlagButton"
-                                                      
-                                    Style="{StaticResource IconButtonStyle}"
-                                    ToolTipService.ToolTip="Markieren">
-                                    <FontIcon x:ConnectionId='55'
-                                        x:Name="FlagIcon"
-                                        FontSize="15"
-                                        Glyph="&#xE7C1;" />
-                                </Button>
-                                <Button x:ConnectionId='51'
                                     x:Name="ArchiveButton"
+                                    helpers:Motion.HoverLift="True"
                                                          
                                     Style="{StaticResource IconButtonStyle}"
                                     ToolTipService.ToolTip="Archivieren">
-                                    <FontIcon FontSize="15" Glyph="&#xE7B8;" />
+                                    <ImageIcon helpers:Svg.Kind="archive" />
+                                </Button>
+                                <Button x:ConnectionId='51'
+                                    x:Name="SpamButton"
+                                    helpers:Motion.HoverLift="True"
+                                                      
+                                    Style="{StaticResource IconButtonStyle}">
+                                    <ImageIcon x:ConnectionId='53' x:Name="SpamIcon" helpers:Svg.Kind="spam" />
                                 </Button>
                                 <Button x:ConnectionId='52'
-                                    x:Name="SpamButton"
-                                                      
-                                    Style="{StaticResource IconButtonStyle}"
-                                    ToolTipService.ToolTip="Als Spam markieren">
-                                    <FontIcon x:ConnectionId='54'
-                                        x:Name="SpamIcon"
-                                        FontSize="15"
-                                        Glyph="&#xE730;" />
-                                </Button>
-                                <Button x:ConnectionId='53'
+                                    helpers:Motion.HoverLift="True"
                                                         
                                     Style="{StaticResource IconButtonStyle}"
                                     ToolTipService.ToolTip="Löschen (Entf)">
-                                    <FontIcon
-                                        FontSize="15"
-                                        Foreground="{StaticResource DangerBrush}"
-                                        Glyph="&#xE74D;" />
+                                    <ImageIcon helpers:Svg.Kind="trash" helpers:Svg.Tone="Danger" />
                                 </Button>
                             </StackPanel>
                         </Grid>
@@ -739,11 +769,11 @@
                         <StackPanel x:ConnectionId='26'
                             x:Name="ReaderHeader"
                             Grid.Row="1"
-                            Padding="28,10,28,16"
-                            Spacing="16">
+                            Padding="32,14,32,18"
+                            Spacing="{StaticResource SpaceLg}">
                             <TextBlock x:ConnectionId='37'
                                 x:Name="DetailSubject"
-                                FontSize="24"
+                                FontSize="{StaticResource FontSizeXl}"
                                 FontWeight="SemiBold"
                                 IsTextSelectionEnabled="True"
                                 TextWrapping="WrapWholeWords" />
@@ -753,74 +783,78 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <Border x:ConnectionId='38'
-                                    x:Name="DetailAvatar"
-                                    Width="46"
-                                    Height="46"
+                                <Border
+                                    Width="44"
+                                    Height="44"
                                     VerticalAlignment="Top"
-                                    CornerRadius="23">
-                                    <TextBlock x:ConnectionId='48'
+                                    CornerRadius="22"
+                                    Style="{StaticResource AvatarStyle}">
+                                    <TextBlock x:ConnectionId='47'
                                         x:Name="DetailInitials"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        FontSize="16"
-                                        FontWeight="SemiBold"
-                                        Foreground="White" />
+                                        FontSize="{StaticResource FontSizeBase}"
+                                        FontWeight="SemiBold" />
                                 </Border>
                                 <StackPanel
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
-                                    Spacing="2">
+                                    Spacing="3">
                                     <TextBlock TextWrapping="Wrap">
-                                        <Run x:ConnectionId='46' x:Name="DetailFromName" FontSize="15" FontWeight="SemiBold" />
+                                        <Run x:ConnectionId='45'
+                                            x:Name="DetailFromName"
+                                            FontSize="{StaticResource FontSizeBase}"
+                                            FontWeight="SemiBold" />
                                         <Run Text="  " />
-                                        <Run x:ConnectionId='47'
+                                        <Run x:ConnectionId='46'
                                             x:Name="DetailFromAddress"
-                                            FontSize="13"
-                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                            FontSize="{StaticResource FontSizeMd}"
+                                            Foreground="{StaticResource TextSecondaryBrush}" />
                                     </TextBlock>
-                                    <ScrollViewer x:ConnectionId='40'
+                                    <ScrollViewer x:ConnectionId='39'
                                         x:Name="RecipientsScroller"
                                         HorizontalScrollBarVisibility="Disabled"
                                         VerticalScrollBarVisibility="Auto">
                                         <StackPanel Spacing="2">
-                                            <TextBlock x:ConnectionId='44'
+                                            <TextBlock x:ConnectionId='43'
                                                 x:Name="DetailTo"
-                                                FontSize="12"
-                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                FontSize="{StaticResource FontSizeSm}"
+                                                Foreground="{StaticResource TextSecondaryBrush}"
                                                 IsTextSelectionEnabled="True"
                                                 TextWrapping="Wrap" />
-                                            <TextBlock x:ConnectionId='45'
+                                            <TextBlock x:ConnectionId='44'
                                                 x:Name="DetailCc"
-                                                FontSize="12"
-                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                FontSize="{StaticResource FontSizeSm}"
+                                                Foreground="{StaticResource TextSecondaryBrush}"
                                                 IsTextSelectionEnabled="True"
                                                 TextWrapping="Wrap" />
                                         </StackPanel>
                                     </ScrollViewer>
-                                    <HyperlinkButton x:ConnectionId='41'
+                                    <HyperlinkButton x:ConnectionId='40'
                                         x:Name="RecipientsToggle"
                                         Margin="-8,0,0,0"
                                         Padding="8,2"
                                                                       
-                                        FontSize="12"
+                                        FontSize="{StaticResource FontSizeSm}"
+                                        Foreground="{StaticResource TextPrimaryBrush}"
                                         Visibility="Collapsed">
                                         <StackPanel Orientation="Horizontal" Spacing="6">
-                                            <TextBlock x:ConnectionId='42' x:Name="RecipientsToggleText" Text="Alle Empfänger anzeigen" />
-                                            <FontIcon x:ConnectionId='43'
+                                            <TextBlock x:ConnectionId='41' x:Name="RecipientsToggleText" Text="Alle Empfänger anzeigen" />
+                                            <ImageIcon x:ConnectionId='42'
                                                 x:Name="RecipientsToggleIcon"
-                                                FontSize="10"
-                                                Glyph="&#xE70D;" />
+                                                Width="12"
+                                                Height="12"
+                                                helpers:Svg.Kind="chevron-down" />
                                         </StackPanel>
                                     </HyperlinkButton>
                                 </StackPanel>
-                                <TextBlock x:ConnectionId='39'
+                                <TextBlock x:ConnectionId='38'
                                     x:Name="DetailDate"
                                     Grid.Column="2"
                                     MaxWidth="200"
                                     VerticalAlignment="Top"
-                                    FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    FontSize="{StaticResource FontSizeSm}"
+                                    Foreground="{StaticResource TextSecondaryBrush}"
                                     TextAlignment="Right"
                                     TextWrapping="Wrap" />
                             </Grid>
@@ -830,7 +864,7 @@
                         <ScrollViewer x:ConnectionId='27'
                             x:Name="AttachmentsScroller"
                             Grid.Row="2"
-                            Padding="28,0,28,14"
+                            Padding="32,0,32,16"
                             HorizontalScrollBarVisibility="Auto"
                             HorizontalScrollMode="Enabled"
                             VerticalScrollBarVisibility="Disabled"
@@ -838,14 +872,17 @@
                             Visibility="Collapsed">
                             <ItemsRepeater x:ConnectionId='31' x:Name="AttachmentsRepeater">
                                 <ItemsRepeater.Layout>
-                                    <StackLayout Orientation="Horizontal" Spacing="8" />
+                                    <StackLayout Orientation="Horizontal" Spacing="{StaticResource SpaceSm}" />
                                 </ItemsRepeater.Layout>
                                 <ItemsRepeater.ItemTemplate>
                                     <DataTemplate                                   >
                                         <Button x:ConnectionId='33'
                                             Padding="8"
+                                            helpers:Motion.HoverLift="True"
+                                            Background="{StaticResource PanelBrush}"
+                                            BorderBrush="{StaticResource BorderBrush}"
                                                                     
-                                            CornerRadius="10"
+                                            CornerRadius="{StaticResource RadiusMd}"
                                                           
                                                                                       >
                                             <Grid ColumnSpacing="10">
@@ -856,14 +893,14 @@
                                                 <Border
                                                     Width="36"
                                                     Height="36"
-                                                    Background="{StaticResource BrandGradientBrush}"
-                                                    CornerRadius="8">
+                                                    Background="{StaticResource AccentBrush}"
+                                                    CornerRadius="{StaticResource RadiusSm}">
                                                     <TextBlock x:ConnectionId='36'
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
                                                         FontSize="10"
                                                         FontWeight="Bold"
-                                                        Foreground="White"
+                                                        Foreground="{StaticResource OnAccentBrush}"
                                                                                   />
                                                 </Border>
                                                 <StackPanel
@@ -871,12 +908,12 @@
                                                     MaxWidth="200"
                                                     VerticalAlignment="Center">
                                                     <TextBlock x:ConnectionId='34'
-                                                        FontSize="13"
+                                                        FontSize="{StaticResource FontSizeMd}"
                                                                                 
                                                         TextTrimming="CharacterEllipsis" />
                                                     <TextBlock x:ConnectionId='35'
-                                                        FontSize="11"
-                                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                        FontSize="{StaticResource FontSizeXs}"
+                                                        Foreground="{StaticResource TextSecondaryBrush}"
                                                                                     />
                                                 </StackPanel>
                                             </Grid>
@@ -890,24 +927,14 @@
                         <Border x:ConnectionId='28'
                             x:Name="BodyCard"
                             Grid.Row="3"
-                            Margin="16,0,16,16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="12">
+                            Margin="20,0,20,20"
+                            Style="{StaticResource PanelStyle}">
                             <Grid>
-                                <WebView2 x:ConnectionId='29'
-                                    x:Name="MailWebView"
-                                    Margin="2"
-                                    Opacity="0">
-                                    <WebView2.OpacityTransition>
-                                        <ScalarTransition Duration="0:0:0.3" />
-                                    </WebView2.OpacityTransition>
-                                </WebView2>
+                                <WebView2 x:ConnectionId='29' x:Name="MailWebView" Margin="2" />
                                 <ProgressRing x:ConnectionId='30'
                                     x:Name="BodyLoadingRing"
-                                    Width="36"
-                                    Height="36"
+                                    Width="32"
+                                    Height="32"
                                     IsActive="False" />
                             </Grid>
                         </Border>
@@ -916,25 +943,18 @@
             </Grid>
 
             <!--  Settings  -->
-            <Grid x:ConnectionId='19' x:Name="SettingsHost" Visibility="Collapsed">
-                <views:SettingsView x:ConnectionId='20' x:Name="SettingsPanel" />
+            <Grid x:ConnectionId='20' x:Name="SettingsHost" Visibility="Collapsed">
+                <views:SettingsView x:ConnectionId='21' x:Name="SettingsPanel" />
             </Grid>
         </Grid>
 
-        <!--  ════════════════ COMPOSE OVERLAY ════════════════  -->
+        <!--  ════════════════ COMPOSE MODAL ════════════════  -->
         <Grid x:ConnectionId='12'
             x:Name="ComposeLayer"
             Grid.ColumnSpan="2"
             Visibility="Collapsed">
-            <Rectangle x:ConnectionId='16'
-                x:Name="ComposeSmoke"
-                Fill="{ThemeResource SmokeFillColorDefaultBrush}"
-                Opacity="0">
-                <Rectangle.OpacityTransition>
-                    <ScalarTransition Duration="0:0:0.25" />
-                </Rectangle.OpacityTransition>
-            </Rectangle>
-            <views:ComposePanel x:ConnectionId='17'
+            <Rectangle x:ConnectionId='17' x:Name="ComposeSmoke" Fill="{StaticResource OverlayBrush}" />
+            <views:ComposePanel x:ConnectionId='18'
                 x:Name="Composer"
                 MaxWidth="860"
                 MaxHeight="820"
@@ -945,27 +965,38 @@
         <Border x:ConnectionId='13'
             x:Name="Toast"
             Grid.ColumnSpan="2"
-            MaxWidth="560"
-            Margin="0,0,0,28"
-            Padding="18,12"
-            HorizontalAlignment="Center"
+            MinWidth="280"
+            MaxWidth="440"
+            Margin="0,0,24,24"
+            HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
-            Background="{ThemeResource ToastBackground}"
-            CornerRadius="14"
+            Background="{StaticResource ToastBrush}"
+            BorderBrush="{StaticResource BorderStrongBrush}"
+            BorderThickness="{StaticResource BorderHairline}"
+            CornerRadius="{StaticResource RadiusLg}"
             IsHitTestVisible="False"
             Visibility="Collapsed">
-            <StackPanel Orientation="Horizontal" Spacing="12">
-                <FontIcon x:ConnectionId='14'
-                    x:Name="ToastIcon"
-                    FontSize="16"
-                    Foreground="{ThemeResource ToastForeground}"
-                    Glyph="&#xE73E;" />
-                <TextBlock x:ConnectionId='15'
-                    x:Name="ToastText"
-                    VerticalAlignment="Center"
-                    Foreground="{ThemeResource ToastForeground}"
-                    TextWrapping="Wrap" />
-            </StackPanel>
+            <Grid>
+                <StackPanel
+                    Padding="16,13,18,15"
+                    Orientation="Horizontal"
+                    Spacing="{StaticResource SpaceMd}">
+                    <ImageIcon x:ConnectionId='15' x:Name="ToastIcon" helpers:Svg.Kind="success" />
+                    <TextBlock x:ConnectionId='16'
+                        x:Name="ToastText"
+                        MaxWidth="360"
+                        VerticalAlignment="Center"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+                <Rectangle x:ConnectionId='14'
+                    x:Name="ToastProgress"
+                    Height="2"
+                    Margin="14,0,14,4"
+                    VerticalAlignment="Bottom"
+                    Fill="{StaticResource BorderStrongBrush}"
+                    RadiusX="1"
+                    RadiusY="1" />
+            </Grid>
         </Border>
     </Grid>
 </Page>

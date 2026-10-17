@@ -42,12 +42,12 @@ public sealed partial class MainPage : Page
 
     private readonly ObservableCollection<FolderItem> _folders =
     [
-        new(ImapService.Inbox, "Posteingang", ""),
-        new(ImapService.Sent, "Gesendet", ""),
-        new(ImapService.Drafts, "Entwürfe", ""),
-        new(ImapService.Archive, "Archiv", ""),
-        new(ImapService.Spam, "Spam", ""),
-        new(ImapService.Trash, "Papierkorb", ""),
+        new(ImapService.Inbox, "Posteingang", "inbox"),
+        new(ImapService.Sent, "Gesendet", "send"),
+        new(ImapService.Drafts, "Entwürfe", "draft"),
+        new(ImapService.Archive, "Archiv", "archive"),
+        new(ImapService.Spam, "Spam", "spam"),
+        new(ImapService.Trash, "Papierkorb", "trash"),
     ];
 
     private ObservableCollection<MailMessage> _messages = [];
@@ -90,6 +90,7 @@ public sealed partial class MainPage : Page
         FolderList.ItemsSource = _folders;
         MailList.ItemsSource = _messages;
         SkeletonList.ItemsSource = Enumerable.Range(0, 9).ToList();
+        Motion.SetOpacity(ComposeSmoke, 0);
 
         _syncTimer = DispatcherQueue.CreateTimer();
         _syncTimer.Tick += (_, _) => _ = SyncNowAsync(manual: false);
@@ -110,12 +111,17 @@ public sealed partial class MainPage : Page
         SettingsPanel.AccountsChanged += (selectId, reconnect) => LoadAccounts(selectId, reconnect);
         SettingsPanel.CloseRequested += () => _ = ShowSettingsAsync(false);
         SettingsService.Changed += ApplySyncInterval;
+        SettingsService.Changed += ApplyMotionSettings;
 
         Loaded += OnLoaded;
-        ActualThemeChanged += (_, _) =>
-        {
-            if (_full != null) _ = RenderBodyAsync(_full, _readVersion);
-        };
+    }
+
+    /// <summary>Theme transitions are switched off together with the app's own motion.</summary>
+    private void ApplyMotionSettings()
+    {
+        MailList.ItemContainerTransitions = Motion.Enabled
+            ? new TransitionCollection { new RepositionThemeTransition() }
+            : null;
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -123,20 +129,18 @@ public sealed partial class MainPage : Page
         if (_initialized) return;
         _initialized = true;
 
-        foreach (var el in new UIElement[] { EmptyPanel, NoAccountPanel, ReaderEmpty, AttachmentsScroller, SkeletonList })
-            AnimationHelper.EnableImplicitFade(el);
+        foreach (var el in new UIElement[]
+                 { EmptyPanel, NoAccountPanel, ReaderEmpty, ReaderContent, AttachmentsScroller, SkeletonHost, LoadMorePanel })
+            Motion.ImplicitFade(el);
 
-        AnimationHelper.AttachHoverScale(ComposeButton, 1.02f, 0.96f);
         Composer.SetShadowReceiver(ComposeSmoke);
-        AnimationHelper.StartFloating(ReaderIllustration);
-        AnimationHelper.StartFloating(WelcomeIllustration);
-        AnimationHelper.StartFloating(EmptyIllustration, 4f);
+        ApplyMotionSettings();
 
         if (SettingsService.Current.PaneCollapsed)
             SetPaneCollapsed(true, animate: false);
 
-        AnimationHelper.FadeSlideIn(Sidebar, -24, 0, 500);
-        AnimationHelper.FadeSlideIn(ContentLayer, 0, 28, 550, 90);
+        Motion.FadeIn(Sidebar, 0, fromX: -12, duration: "MotionSlow");
+        Motion.FadeIn(ContentLayer, 12, delayMs: 60, duration: "MotionSlow");
 
         FolderList.SelectedIndex = 0;
         ApplySyncInterval();
@@ -215,7 +219,7 @@ public sealed partial class MainPage : Page
         if (password == null)
         {
             ShowError("Für dieses Konto ist kein Passwort gespeichert. Bitte das Konto in den Einstellungen bearbeiten.");
-            ShowEmpty("Nicht angemeldet", "Passwort fehlt.", "");
+            ShowEmpty("Nicht angemeldet", "Passwort fehlt.", "lock");
             return;
         }
 
@@ -246,7 +250,7 @@ public sealed partial class MainPage : Page
         catch (Exception ex) when (cv == _connectVersion)
         {
             ShowError($"Verbindung fehlgeschlagen: {Friendly(ex)}");
-            ShowEmpty("Keine Verbindung", "Prüfe deine Internetverbindung und die Kontoeinstellungen.", "");
+            ShowEmpty("Keine Verbindung", "Prüfe deine Internetverbindung und die Kontoeinstellungen.", "offline");
         }
         catch
         {
@@ -266,17 +270,15 @@ public sealed partial class MainPage : Page
         if (_account == null)
         {
             AccountInitials.Text = "+";
-            AccountAvatar.Background = (Brush)Application.Current.Resources["BrandGradientBrush"];
             AccountNameText.Text = "Kein Konto";
             AccountMailText.Text = "Konto hinzufügen";
             return;
         }
 
         AccountInitials.Text = Fmt.Initials(_account.Name);
-        AccountAvatar.Background = Fmt.AvatarBrush(_account.EmailAddress);
         AccountNameText.Text = _account.Name;
         AccountMailText.Text = _account.EmailAddress;
-        AnimationHelper.Pop(AccountAvatar, 0.7f);
+        Motion.FadeIn(AccountAvatar, 0, fromScale: (float)Tokens.Double("MotionModalScale"));
     }
 
     private void RebuildAccountMenu()
@@ -302,11 +304,11 @@ public sealed partial class MainPage : Page
         if (_accounts.Count > 0)
             AccountMenu.Items.Add(new MenuFlyoutSeparator());
 
-        var add = new MenuFlyoutItem { Text = "Konto hinzufügen", Icon = new FontIcon { Glyph = "" } };
+        var add = new MenuFlyoutItem { Text = "Konto hinzufügen", Icon = Icon("user-plus") };
         add.Click += (_, _) => _ = AddAccountAsync();
         AccountMenu.Items.Add(add);
 
-        var manage = new MenuFlyoutItem { Text = "Konten verwalten", Icon = new FontIcon { Glyph = "" } };
+        var manage = new MenuFlyoutItem { Text = "Konten verwalten", Icon = Icon("settings") };
         manage.Click += (_, _) => _ = ShowSettingsAsync(true);
         AccountMenu.Items.Add(manage);
     }
@@ -317,7 +319,7 @@ public sealed partial class MainPage : Page
         if (account == null) return;
         LoadAccounts(account.Id, reconnect: true);
         SettingsPanel.Refresh();
-        ShowToast("Konto hinzugefügt", "");
+        ShowToast("Konto hinzugefügt", "user-plus");
     }
 
     private void AddAccount_Click(object sender, RoutedEventArgs e) => _ = AddAccountAsync();
@@ -346,7 +348,7 @@ public sealed partial class MainPage : Page
         _folder = item.Tag;
         _localQuery = "";
         SearchCleared?.Invoke();
-        AnimationHelper.FadeSlideIn(FolderHeader, -14, 0, 380);
+        Motion.FadeIn(FolderHeader, 0, fromX: -8);
         await LoadFolderAsync(item.Tag);
     }
 
@@ -383,7 +385,7 @@ public sealed partial class MainPage : Page
             _all = [];
             _total = 0;
             SetMessages([]);
-            ShowEmpty("Ordner nicht verfügbar", "Dieser Ordner existiert auf dem Server nicht.", "");
+            ShowEmpty("Ordner nicht verfügbar", "Dieser Ordner existiert auf dem Server nicht.", "folder");
         }
         catch (Exception ex) when (v == _loadVersion)
         {
@@ -391,7 +393,7 @@ public sealed partial class MainPage : Page
             _total = 0;
             SetMessages([]);
             ShowError($"Ordner konnte nicht geladen werden: {Friendly(ex)}");
-            ShowEmpty("Laden fehlgeschlagen", "Versuche es mit F5 erneut.", "");
+            ShowEmpty("Laden fehlgeschlagen", "Versuche es mit F5 erneut.", "alert");
         }
     }
 
@@ -442,17 +444,19 @@ public sealed partial class MainPage : Page
         }
 
         if (_serverQuery != null || _localQuery.Length > 0)
-            ShowEmpty("Keine Treffer", "Für deine Suche wurden keine E-Mails gefunden.", "");
+            ShowEmpty("Keine Treffer", "Für deine Suche wurden keine E-Mails gefunden.", "search");
         else if (FilterSegmented.SelectedIndex == 1)
-            ShowEmpty("Alles gelesen", "Hier gibt es keine ungelesenen E-Mails.", "");
+            ShowEmpty("Alles gelesen", "Hier gibt es keine ungelesenen E-Mails.", "mail-open");
         else if (FilterSegmented.SelectedIndex == 2)
-            ShowEmpty("Nichts markiert", "Markierte E-Mails erscheinen hier.", "");
+            ShowEmpty("Nichts markiert", "Markierte E-Mails erscheinen hier.", "flag");
         else
-            ShowEmpty("Alles erledigt!", "Dieser Ordner ist leer.", "");
+            ShowEmpty("Alles erledigt!", "Dieser Ordner ist leer.", "check");
     }
 
     private void SetMessages(List<MailMessage> list)
     {
+        _staggerUntil = DateTime.Now + TimeSpan.FromMilliseconds(600);
+        _animateIn.Clear();
         _messages = new ObservableCollection<MailMessage>(list);
         MailList.ItemsSource = _messages;
     }
@@ -513,7 +517,10 @@ public sealed partial class MainPage : Page
             var added = more.Where(m => !known.Contains(m.Uid)).ToList();
             _all.AddRange(added);
             foreach (var m in added.Where(Matches))
+            {
+                _animateIn.Add(m);
                 _messages.Add(m);
+            }
 
             UpdateFolderHeader();
         }
@@ -544,7 +551,7 @@ public sealed partial class MainPage : Page
             UpdateTrayCount();
             UpdateFolderHeader();
             if (_selected != null) UpdateReaderToolbar(_selected);
-            ShowToast("Alle E-Mails als gelesen markiert", "");
+            ShowToast("Alle E-Mails als gelesen markiert", "mail-open");
         }
         catch (Exception ex)
         {
@@ -556,21 +563,44 @@ public sealed partial class MainPage : Page
 
     private void ShowState(ListState state)
     {
-        SkeletonList.Visibility = state == ListState.Loading ? Visibility.Visible : Visibility.Collapsed;
+        SkeletonHost.Visibility = state == ListState.Loading ? Visibility.Visible : Visibility.Collapsed;
         MailList.Visibility = state == ListState.List ? Visibility.Visible : Visibility.Collapsed;
         EmptyPanel.Visibility = state == ListState.Empty ? Visibility.Visible : Visibility.Collapsed;
         NoAccountPanel.Visibility = state == ListState.NoAccount ? Visibility.Visible : Visibility.Collapsed;
         FilterSegmented.Visibility = state == ListState.NoAccount ? Visibility.Collapsed : Visibility.Visible;
-
-        if (state == ListState.Loading) AnimationHelper.StartPulse(SkeletonList);
-        else AnimationHelper.StopPulse(SkeletonList);
+        Motion.Shimmer(ShimmerBar, state == ListState.Loading);
     }
 
-    private void ShowEmpty(string title, string subtitle, string glyph)
+    private void SkeletonHost_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        // The shimmer sweeps via translation; clip it to the skeleton area.
+        SkeletonHost.Clip = new RectangleGeometry { Rect = new Windows.Foundation.Rect(0, 0, e.NewSize.Width, e.NewSize.Height) };
+        if (SkeletonHost.Visibility == Visibility.Visible) Motion.Shimmer(ShimmerBar, true);
+    }
+
+    // ── Staggered list entrance ──────────────────────────────────────────
+
+    private DateTime _staggerUntil;
+    private readonly HashSet<MailMessage> _animateIn = [];
+
+    private void MailList_ContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+    {
+        if (args.InRecycleQueue) return;
+        var max = (int)Tokens.Double("MotionStaggerMax", 10);
+
+        if (DateTime.Now < _staggerUntil && args.ItemIndex < max)
+            Motion.FadeIn(args.ItemContainer, 10, args.ItemIndex * (int)Tokens.Double("MotionStaggerStep", 50));
+        else if (args.Item is MailMessage m && _animateIn.Remove(m))
+            Motion.FadeIn(args.ItemContainer, -8, fromScale: (float)Tokens.Double("MotionModalScale"));
+        else
+            Motion.Reset(args.ItemContainer);
+    }
+
+    private void ShowEmpty(string title, string subtitle, string icon)
     {
         EmptyTitle.Text = title;
         EmptySubtitle.Text = subtitle;
-        EmptyGlyph.Glyph = glyph;
+        Svg.SetKind(EmptyIcon, icon);
         ShowState(ListState.Empty);
     }
 
@@ -594,9 +624,12 @@ public sealed partial class MainPage : Page
         if (sender is not Grid grid) return;
         var panel = grid.Children.OfType<StackPanel>().FirstOrDefault(c => c.Name == "HoverActions");
         if (panel == null) return;
-        panel.Opacity = show ? 1 : 0;
+        Motion.FadeTo(panel, show ? 1 : 0);
         panel.IsHitTestVisible = show;
     }
+
+    private void HoverActions_Loaded(object sender, RoutedEventArgs e) =>
+        Motion.SetOpacity((UIElement)sender, 0);
 
     private void HoverRead_Click(object sender, RoutedEventArgs e)
     {
@@ -646,11 +679,11 @@ public sealed partial class MainPage : Page
         ReaderContent.Visibility = Visibility.Visible;
         FillHeader(summary);
         UpdateReaderToolbar(summary);
-        AnimationHelper.FadeSlideIn(ReaderHeader, 0, 14, 420);
-        AnimationHelper.FadeSlideIn(BodyCard, 0, 24, 480, 60);
+        Motion.FadeIn(ReaderHeader, 8);
+        Motion.FadeIn(BodyCard, 12, delayMs: (int)Tokens.Double("MotionStaggerStep"));
 
         AttachmentsScroller.Visibility = Visibility.Collapsed;
-        MailWebView.Opacity = 0;
+        Motion.FadeTo(MailWebView, 0, "MotionFast");
         BodyLoadingRing.IsActive = true;
 
         var wasUnread = !summary.IsRead;
@@ -700,7 +733,6 @@ public sealed partial class MainPage : Page
             !string.Equals(m.FromAddress, m.FromDisplay, StringComparison.OrdinalIgnoreCase)
             ? m.FromAddress : "";
         DetailDate.Text = Fmt.LongDate(m.Date);
-        DetailAvatar.Background = Fmt.AvatarBrush(m.FromAddress);
         DetailInitials.Text = Fmt.Initials(m.FromDisplay);
 
         // Collapse the recipient list again when a different message is shown.
@@ -772,7 +804,7 @@ public sealed partial class MainPage : Page
 
         RecipientsToggle.Visibility = collapsible ? Visibility.Visible : Visibility.Collapsed;
         RecipientsToggleText.Text = _recipientsExpanded ? "Weniger anzeigen" : $"Alle {total} Empfänger anzeigen";
-        RecipientsToggleIcon.Glyph = _recipientsExpanded ? "" : "";
+        Svg.SetKind(RecipientsToggleIcon, _recipientsExpanded ? "chevron-up" : "chevron-down");
 
         // Expanded long lists scroll instead of pushing the message body out of view.
         RecipientsScroller.MaxHeight = _recipientsExpanded ? 180 : double.PositiveInfinity;
@@ -783,18 +815,15 @@ public sealed partial class MainPage : Page
     {
         _recipientsExpanded = !_recipientsExpanded;
         UpdateRecipients();
-        AnimationHelper.FadeSlideIn(RecipientsScroller, 0, _recipientsExpanded ? -6 : 6, 280);
+        Motion.FadeIn(RecipientsScroller, _recipientsExpanded ? -6 : 6);
     }
 
     private void UpdateReaderToolbar(MailMessage m)
     {
-        ToggleReadIcon.Glyph = Fmt.ReadGlyph(m.IsRead);
+        Svg.SetKind(ToggleReadIcon, Fmt.ReadIcon(m.IsRead));
         ToolTipService.SetToolTip(ToggleReadButton, Fmt.ReadLabel(m.IsRead) + " (Strg+Q)");
 
-        if (m.IsFlagged)
-            FlagIcon.Foreground = (Brush)Application.Current.Resources["FlagBrush"];
-        else
-            FlagIcon.ClearValue(IconElement.ForegroundProperty);
+        FlagDot.Visibility = Fmt.Vis(m.IsFlagged);
         ToolTipService.SetToolTip(FlagButton, Fmt.FlagLabel(m.IsFlagged));
 
         var inArchive = _folder == ImapService.Archive;
@@ -804,7 +833,7 @@ public sealed partial class MainPage : Page
         var inSpam = _folder == ImapService.Spam;
         SpamButton.Visibility = _imap?.HasFolder(ImapService.Spam) == true
             ? Visibility.Visible : Visibility.Collapsed;
-        SpamIcon.Glyph = inSpam ? "" : "";
+        Svg.SetKind(SpamIcon, inSpam ? "shield-check" : "spam");
         ToolTipService.SetToolTip(SpamButton, inSpam ? "Kein Spam (in den Posteingang)" : "Als Spam markieren");
 
         EditDraftButton.Visibility = _folder == ImapService.Drafts ? Visibility.Visible : Visibility.Collapsed;
@@ -850,7 +879,7 @@ public sealed partial class MainPage : Page
         MailWebView.NavigationCompleted += (_, _) =>
         {
             BodyLoadingRing.IsActive = false;
-            MailWebView.Opacity = 1;
+            Motion.FadeTo(MailWebView, 1, "MotionSlow");
         };
 
         MailWebView.DefaultBackgroundColor = Colors.Transparent;
@@ -894,10 +923,9 @@ public sealed partial class MainPage : Page
         await EnsureWebViewAsync();
         if (version != _readVersion) return;
 
-        var dark = ActualTheme == ElementTheme.Dark;
         var html = full.HtmlBody.Length > 0
             ? WrapHtml(full.HtmlBody)
-            : WrapPlainText(full.PlainBody, dark);
+            : WrapPlainText(full.PlainBody);
 
         NavigateHtml(html);
     }
@@ -921,10 +949,9 @@ public sealed partial class MainPage : Page
     private async Task ShowBodyErrorAsync(Exception ex)
     {
         await EnsureWebViewAsync();
-        var dark = ActualTheme == ElementTheme.Dark;
-        var fg = dark ? "#f87171" : "#b91c1c";
+        var fg = Tokens.Css("DangerColor");
         NavigateHtml($"""
-            <html><body style="font-family:'Segoe UI';padding:24px;color:{fg};background:transparent">
+            <html><body style="font-family:Inter,'Segoe UI';padding:24px;color:{fg};background:transparent">
             <b>Die Nachricht konnte nicht geladen werden.</b><br>{System.Net.WebUtility.HtmlEncode(Friendly(ex))}
             </body></html>
             """);
@@ -937,21 +964,21 @@ public sealed partial class MainPage : Page
           <meta charset="utf-8">
           <meta name="color-scheme" content="light">
           <style>
-            html { background:#ffffff; }
-            body { font-family:'Segoe UI Variable Text','Segoe UI',Arial,sans-serif; font-size:14px;
-                   line-height:1.5; color:#1f2328; margin:0; padding:24px; overflow-wrap:anywhere; }
+            html { background:{{Tokens.Css("PaperColor")}}; }
+            body { font-family:Inter,'Segoe UI Variable Text','Segoe UI',Arial,sans-serif; font-size:14px;
+                   line-height:1.5; color:{{Tokens.Css("PaperTextColor")}}; margin:0; padding:24px; overflow-wrap:anywhere; }
             img { max-width:100%; height:auto; }
-            a { color:#4f46e5; }
-            blockquote { border-left:3px solid #c7d2fe; margin:8px 0; padding-left:12px; color:#555; }
+            a { color:{{Tokens.Css("PaperTextColor")}}; }
+            blockquote { border-left:3px solid {{Tokens.Css("PaperBorderColor")}}; margin:8px 0; padding-left:12px; color:{{Tokens.Css("PaperMutedColor")}}; }
             ::-webkit-scrollbar { width:10px; height:10px; }
-            ::-webkit-scrollbar-thumb { background:#c4c4c4; border-radius:6px; border:2px solid #fff; }
+            ::-webkit-scrollbar-thumb { background:{{Tokens.Css("PaperBorderColor")}}; border-radius:6px; border:2px solid {{Tokens.Css("PaperColor")}}; }
           </style>
         </head>
         <body>{{body}}</body>
         </html>
         """;
 
-    private static string WrapPlainText(string text, bool isDark)
+    private static string WrapPlainText(string text)
     {
         var encoded = System.Net.WebUtility.HtmlEncode(text).Replace("\r\n", "\n").Replace("\r", "\n");
 
@@ -961,11 +988,11 @@ public sealed partial class MainPage : Page
 
         encoded = Regex.Replace(encoded, @"(?m)^(&gt;.*)$", "<span class=\"quote\">$1</span>");
 
-        var fg = isDark ? "#e5e7eb" : "#1f2328";
-        var link = isDark ? "#a5b4fc" : "#4f46e5";
-        var quoteFg = isDark ? "#9ca3af" : "#6b7280";
-        var quoteBorder = isDark ? "#4b5563" : "#c7d2fe";
-        var scroll = isDark ? "#555" : "#c4c4c4";
+        var fg = Tokens.Css("TextPrimaryColor");
+        var link = Tokens.Css("AccentColor");
+        var quoteFg = Tokens.Css("TextSecondaryColor");
+        var quoteBorder = Tokens.Css("BorderStrongColor");
+        var scroll = Tokens.Css("BorderStrongColor");
 
         return $$"""
             <!DOCTYPE html>
@@ -974,7 +1001,7 @@ public sealed partial class MainPage : Page
               <meta charset="utf-8">
               <style>
                 html, body { background:transparent; }
-                body { font-family:'Segoe UI Variable Text','Segoe UI',Arial,sans-serif; font-size:14px;
+                body { font-family:Inter,'Segoe UI Variable Text','Segoe UI',Arial,sans-serif; font-size:14px;
                        line-height:1.6; margin:0; padding:24px; color:{{fg}};
                        white-space:pre-wrap; overflow-wrap:anywhere; }
                 a { color:{{link}}; }
@@ -995,9 +1022,9 @@ public sealed partial class MainPage : Page
         if (sender is not FrameworkElement fe || fe.Tag is not MailAttachment att) return;
 
         var menu = new MenuFlyout();
-        var open = new MenuFlyoutItem { Text = "Öffnen", Icon = new FontIcon { Glyph = "" } };
+        var open = new MenuFlyoutItem { Text = "Öffnen", Icon = Icon("external") };
         open.Click += (_, _) => _ = OpenAttachmentAsync(att);
-        var save = new MenuFlyoutItem { Text = "Speichern unter …", Icon = new FontIcon { Glyph = "" } };
+        var save = new MenuFlyoutItem { Text = "Speichern unter …", Icon = Icon("save") };
         save.Click += (_, _) => _ = SaveAttachmentAsync(att);
         menu.Items.Add(open);
         menu.Items.Add(save);
@@ -1059,7 +1086,7 @@ public sealed partial class MainPage : Page
                 stream.SetLength(0);
                 await att.SaveToAsync(stream);
             }
-            ShowToast($"Gespeichert: {file.Name}", "");
+            ShowToast($"Gespeichert: {file.Name}", "save");
         }
         catch (Exception ex)
         {
@@ -1092,7 +1119,7 @@ public sealed partial class MainPage : Page
         var m = _selected;
         var imap = _imap;
         _ = RemoveMessageAsync(m, () => imap.MoveAsync(m.FolderTag, m.Uid, ImapService.Archive),
-            "Archiviert", "");
+            "Archiviert", "archive");
     }
 
     private void Spam_Click(object sender, RoutedEventArgs e)
@@ -1104,7 +1131,7 @@ public sealed partial class MainPage : Page
         _ = RemoveMessageAsync(m,
             () => imap.MoveAsync(m.FolderTag, m.Uid, toInbox ? ImapService.Inbox : ImapService.Spam),
             toInbox ? "In den Posteingang verschoben" : "Als Spam markiert",
-            toInbox ? "" : "");
+            toInbox ? "shield-check" : "spam");
     }
 
     private async Task ToggleReadAsync(MailMessage m)
@@ -1141,13 +1168,13 @@ public sealed partial class MainPage : Page
         if (m == _selected)
         {
             UpdateReaderToolbar(m);
-            AnimationHelper.Pop(FlagIcon, 0.5f);
+            Motion.FadeIn(FlagDot, 0, fromScale: 0.5f);
         }
 
         try
         {
             await imap.SetFlagAsync(m.FolderTag, m.Uid, MessageFlags.Flagged, newValue);
-            ShowToast(newValue ? "Markiert" : "Markierung entfernt", "");
+            ShowToast(newValue ? "Markiert" : "Markierung entfernt", "flag");
         }
         catch (Exception ex)
         {
@@ -1168,7 +1195,7 @@ public sealed partial class MainPage : Page
             return;
 
         await RemoveMessageAsync(m, () => imap.DeleteAsync(m.FolderTag, m.Uid),
-            permanent ? "Endgültig gelöscht" : "In den Papierkorb verschoben", "");
+            permanent ? "Endgültig gelöscht" : "In den Papierkorb verschoben", "trash");
     }
 
     /// <summary>Optimistically removes a message from the list, then performs the server operation.</summary>
@@ -1178,6 +1205,8 @@ public sealed partial class MainPage : Page
         var allIndex = _all.IndexOf(m);
         var wasSelected = m == _selected;
 
+        if (MailList.ContainerFromItem(m) is UIElement container)
+            await Motion.FadeOut(container, 0, (float)Tokens.Double("MotionModalScale"));
         _messages.Remove(m);
         _all.Remove(m);
         _total = Math.Max(0, _total - 1);
@@ -1266,25 +1295,29 @@ public sealed partial class MainPage : Page
 
         _composeOpen = true;
         ComposeLayer.Visibility = Visibility.Visible;
-        ComposeSmoke.Opacity = 1;
-        AnimationHelper.FadeSlideIn(Composer, 0, 48, 480, 0, 0.94f);
+        // Modal: fade + scale 0.95 → 1 + slight slide up; closing is the reverse.
+        Motion.FadeTo(ComposeSmoke, 1, "MotionBase");
+        Motion.FadeIn(Composer, (float)Tokens.Double("MotionModalSlide"),
+            fromScale: (float)Tokens.Double("MotionModalScale"), duration: "MotionSlow");
     }
 
     private async Task CloseComposeAsync()
     {
         if (!_composeOpen) return;
         _composeOpen = false;
-        ComposeSmoke.Opacity = 0;
-        await AnimationHelper.FadeSlideOut(Composer, 0, 36, 220, 0.96f);
+        Motion.FadeTo(ComposeSmoke, 0, "MotionBase");
+        await Motion.FadeOut(Composer, (float)Tokens.Double("MotionModalSlide"),
+            (float)Tokens.Double("MotionModalScale"), duration: "MotionBase");
+        if (_composeOpen) return; // reopened meanwhile
         ComposeLayer.Visibility = Visibility.Collapsed;
-        AnimationHelper.Reset(Composer);
+        Motion.Reset(Composer);
         MailList.Focus(FocusState.Programmatic);
     }
 
     private async void Composer_Sent(object? sender, ComposeSentEventArgs e)
     {
         await CloseComposeAsync();
-        ShowToast("E-Mail gesendet", "");
+        ShowToast("E-Mail gesendet", "send");
 
         if (_imap == null || _account == null || e.Account.Id != _account.Id) return;
         var imap = _imap;
@@ -1319,7 +1352,7 @@ public sealed partial class MainPage : Page
                 await imap.DeletePermanentAsync(ImapService.Drafts, draftUid);
 
             await CloseComposeAsync();
-            ShowToast("Entwurf gespeichert", "");
+            ShowToast("Entwurf gespeichert", "draft");
 
             if (_folder == ImapService.Drafts)
                 await LoadFolderAsync(_folder, quiet: true);
@@ -1471,12 +1504,12 @@ public sealed partial class MainPage : Page
             _all = results;
             _total = results.Count;
             ApplyFilter();
-            AnimationHelper.FadeSlideIn(FolderHeader, -14, 0, 380);
+            Motion.FadeIn(FolderHeader, 0, fromX: -8);
         }
         catch (Exception ex) when (v == _loadVersion)
         {
             ShowError($"Suche fehlgeschlagen: {Friendly(ex)}");
-            ShowEmpty("Suche fehlgeschlagen", "Der Server unterstützt diese Suche evtl. nicht.", "");
+            ShowEmpty("Suche fehlgeschlagen", "Der Server unterstützt diese Suche evtl. nicht.", "alert");
         }
     }
 
@@ -1565,6 +1598,7 @@ public sealed partial class MainPage : Page
             {
                 if (_messages[i].Date < n.Date) { listIdx = i; break; }
             }
+            _animateIn.Add(n);
             _messages.Insert(listIdx < 0 ? _messages.Count : listIdx, n);
         }
 
@@ -1642,53 +1676,57 @@ public sealed partial class MainPage : Page
     private void Settings_Click(object sender, RoutedEventArgs e) =>
         _ = ShowSettingsAsync(SettingsHost.Visibility != Visibility.Visible);
 
-    private async Task ShowSettingsAsync(bool show)
+    /// <summary>Page switch mail ↔ settings as a crossfade (never blocks input).</summary>
+    private Task ShowSettingsAsync(bool show)
     {
-        var isOpen = SettingsHost.Visibility == Visibility.Visible;
-        if (show == isOpen) return;
+        var isOpen = SettingsHost.Visibility == Visibility.Visible && SettingsHost.IsHitTestVisible;
+        if (show == isOpen) return Task.CompletedTask;
 
         if (show)
         {
             SettingsPanel.Refresh();
             FolderList.SelectedItem = null;
-            await AnimationHelper.FadeSlideOut(MailArea, 0, -12, 140);
-            MailArea.Visibility = Visibility.Collapsed;
-            AnimationHelper.Reset(MailArea);
-            SettingsHost.Visibility = Visibility.Visible;
-            AnimationHelper.FadeSlideIn(SettingsHost, 0, 32, 450);
-            SettingsIcon.Foreground = (Brush)Application.Current.Resources["BrandBrush"];
+            Motion.Crossfade(MailArea, SettingsHost);
+            Svg.SetTone(SettingsIcon, "Primary");
         }
         else
         {
-            await AnimationHelper.FadeSlideOut(SettingsHost, 0, 24, 140);
-            SettingsHost.Visibility = Visibility.Collapsed;
-            AnimationHelper.Reset(SettingsHost);
-            MailArea.Visibility = Visibility.Visible;
-            AnimationHelper.FadeSlideIn(MailArea, 0, 20, 420);
-            SettingsIcon.ClearValue(IconElement.ForegroundProperty);
+            Motion.Crossfade(SettingsHost, MailArea);
+            Svg.SetTone(SettingsIcon, "Secondary");
             SelectFolderItem(_folder);
         }
+        return Task.CompletedTask;
     }
 
-    public void ShowToast(string text, string? glyph = null, bool isError = false)
+    /// <summary>Toast slides in from the side with a draining progress bar.</summary>
+    public void ShowToast(string text, string? icon = null, bool isError = false)
     {
         ToastText.Text = text;
-        ToastIcon.Glyph = isError ? "" : glyph ?? "";
+        Svg.Set(ToastIcon, isError ? "alert" : icon ?? "success", isError ? "Danger" : "Primary");
         Toast.Visibility = Visibility.Visible;
-        AnimationHelper.FadeSlideIn(Toast, 0, 40, 420, 0, 0.9f);
+        Motion.FadeIn(Toast, 0, fromX: 32);
 
+        var duration = Tokens.Ms(isError ? "MotionToastError" : "MotionToast");
+        Motion.Drain(ToastProgress, duration);
         _toastTimer.Stop();
-        _toastTimer.Interval = TimeSpan.FromSeconds(isError ? 6 : 3);
+        _toastTimer.Interval = duration;
         _toastTimer.Start();
     }
 
     private async Task HideToastAsync()
     {
         _toastTimer.Stop();
-        await AnimationHelper.FadeSlideOut(Toast, 0, 24, 200, 0.95f);
+        await Motion.FadeOut(Toast, 0, toX: 32);
         if (_toastTimer.IsRunning) return; // a new toast appeared meanwhile
         Toast.Visibility = Visibility.Collapsed;
-        AnimationHelper.Reset(Toast);
+        Motion.Reset(Toast);
+    }
+
+    private static ImageIcon Icon(string kind)
+    {
+        var icon = new ImageIcon();
+        Svg.SetKind(icon, kind);
+        return icon;
     }
 
     // ══════════════════════════════════════════════════════════════════

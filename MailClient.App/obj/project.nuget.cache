@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pRqz5jU9IlY=",
+  "dgSpecHash": "MizVvXILb8I=",
   "success": true,
-  "projectFilePath": "C:\\Dev\\MailClient\\MailClient.App\\MailClient.App.csproj",
+  "projectFilePath": "C:\\Dev\\0x-MailClient\\MailClient.App\\MailClient.App.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kuba\\.nuget\\packages\\bouncycastle.cryptography\\2.7.0\\bouncycastle.cryptography.2.7.0.nupkg.sha512",
     "C:\\Users\\Kuba\\.nuget\\packages\\communitytoolkit.common\\8.2.1\\communitytoolkit.common.8.2.1.nupkg.sha512",

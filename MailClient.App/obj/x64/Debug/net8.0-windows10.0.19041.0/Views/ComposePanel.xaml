@@ -2,7 +2,9 @@
     x:Class="MailClient.App.Views.ComposePanel"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="using:MailClient.App.Helpers"
     xmlns:models="using:MailClient.Core.Models"
+    FontFamily="{StaticResource AppFont}"
     KeyboardAcceleratorPlacementMode="Hidden">
 
     <UserControl.Resources>
@@ -16,13 +18,13 @@
 
         <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}" />
+            <Setter Property="FontSize" Value="{StaticResource FontSizeMd}" />
         </Style>
         <Style x:Key="FieldRowStyle" TargetType="Grid">
-            <Setter Property="BorderBrush" Value="{ThemeResource DividerStrokeColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
             <Setter Property="BorderThickness" Value="0,0,0,1" />
-            <Setter Property="MinHeight" Value="44" />
+            <Setter Property="MinHeight" Value="46" />
         </Style>
     </UserControl.Resources>
 
@@ -31,13 +33,14 @@
         <KeyboardAccelerator x:ConnectionId='3' Key="Escape"                       />
     </UserControl.KeyboardAccelerators>
 
+    <!--  Glass modal: one large blurred surface  -->
     <Grid x:ConnectionId='4'
         x:Name="Card"
         AllowDrop="True"
-        Background="{ThemeResource SolidBackgroundFillColorTertiaryBrush}"
-        BorderBrush="{ThemeResource SurfaceStrokeColorFlyoutBrush}"
-        BorderThickness="1"
-        CornerRadius="16"
+        Background="{StaticResource GlassModalBrush}"
+        BorderBrush="{StaticResource BorderStrongBrush}"
+        BorderThickness="{StaticResource BorderHairline}"
+        CornerRadius="{StaticResource RadiusXl}"
                                   
                                 
                         >
@@ -51,42 +54,41 @@
         </Grid.RowDefinitions>
 
         <!--  Header  -->
-        <Grid Padding="24,18,14,10">
-            <StackPanel Orientation="Horizontal" Spacing="14">
-                <Border x:ConnectionId='32'
-                    x:Name="HeaderBadge"
-                    Width="38"
-                    Height="38"
-                    Background="{StaticResource BrandGradientBrush}"
-                    CornerRadius="12">
-                    <FontIcon x:ConnectionId='34'
-                        x:Name="HeaderGlyph"
-                        FontSize="16"
-                        Foreground="White"
-                        Glyph="&#xE70F;" />
+        <Grid Padding="28,22,16,10">
+            <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpaceMd}">
+                <Border
+                    Width="36"
+                    Height="36"
+                    Background="{StaticResource AccentBrush}"
+                    CornerRadius="{StaticResource RadiusMd}">
+                    <ImageIcon x:ConnectionId='33'
+                        x:Name="HeaderIcon"
+                        helpers:Svg.Kind="compose"
+                        helpers:Svg.Tone="OnAccent" />
                 </Border>
-                <TextBlock x:ConnectionId='33'
+                <TextBlock x:ConnectionId='32'
                     x:Name="TitleText"
                     VerticalAlignment="Center"
-                    FontSize="20"
+                    FontSize="{StaticResource FontSizeXl}"
                     FontWeight="SemiBold"
                     Text="Neue Nachricht" />
             </StackPanel>
             <Button x:ConnectionId='31'
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
+                helpers:Motion.HoverLift="True"
                                    
                 Style="{StaticResource IconButtonStyle}"
                 ToolTipService.ToolTip="Schließen (Esc)">
-                <FontIcon FontSize="13" Glyph="&#xE711;" />
+                <ImageIcon helpers:Svg.Kind="close" helpers:Svg.Tone="Secondary" />
             </Button>
         </Grid>
 
         <!--  Address fields  -->
-        <StackPanel Grid.Row="1" Padding="24,0">
+        <StackPanel Grid.Row="1" Padding="28,0">
             <Grid Style="{StaticResource FieldRowStyle}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="56" />
+                    <ColumnDefinition Width="60" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Von" />
@@ -95,8 +97,8 @@
                     Grid.Column="1"
                     MinWidth="260"
                     VerticalAlignment="Center"
-                    BorderThickness="0"
-                    Background="Transparent" />
+                    Background="Transparent"
+                    BorderThickness="0" />
                 <TextBlock x:ConnectionId='30'
                     x:Name="FromText"
                     Grid.Column="1"
@@ -107,7 +109,7 @@
 
             <Grid Style="{StaticResource FieldRowStyle}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="56" />
+                    <ColumnDefinition Width="60" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
@@ -125,7 +127,8 @@
                     VerticalAlignment="Center"
                                           
                     Content="CC / BCC"
-                    FontSize="12" />
+                    FontSize="{StaticResource FontSizeSm}"
+                    Foreground="{StaticResource TextSecondaryBrush}" />
             </Grid>
 
             <Grid x:ConnectionId='22'
@@ -133,7 +136,7 @@
                 Style="{StaticResource FieldRowStyle}"
                 Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="56" />
+                    <ColumnDefinition Width="60" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="CC" />
@@ -149,7 +152,7 @@
                 Style="{StaticResource FieldRowStyle}"
                 Visibility="Collapsed">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="56" />
+                    <ColumnDefinition Width="60" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="BCC" />
@@ -162,7 +165,7 @@
 
             <Grid Style="{StaticResource FieldRowStyle}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="56" />
+                    <ColumnDefinition Width="60" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Betreff" />
@@ -179,9 +182,9 @@
         <TextBox x:ConnectionId='5'
             x:Name="BodyBox"
             Grid.Row="2"
-            Padding="24,14"
+            Padding="28,16"
             AcceptsReturn="True"
-            FontSize="14"
+            FontSize="{StaticResource FontSizeBase}"
             IsSpellCheckEnabled="True"
             PlaceholderText="Schreibe deine Nachricht …"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -191,7 +194,7 @@
         <ScrollViewer x:ConnectionId='6'
             x:Name="AttachmentsScroller"
             Grid.Row="3"
-            Padding="24,0,24,10"
+            Padding="28,0,28,12"
             HorizontalScrollBarVisibility="Auto"
             HorizontalScrollMode="Enabled"
             VerticalScrollBarVisibility="Disabled"
@@ -199,17 +202,17 @@
             Visibility="Collapsed">
             <ItemsRepeater x:ConnectionId='15' x:Name="AttachmentsRepeater">
                 <ItemsRepeater.Layout>
-                    <StackLayout Orientation="Horizontal" Spacing="8" />
+                    <StackLayout Orientation="Horizontal" Spacing="{StaticResource SpaceSm}" />
                 </ItemsRepeater.Layout>
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate                                   >
                         <Grid x:ConnectionId='17'
                             Padding="6,6,4,6"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            ColumnSpacing="8"
-                            CornerRadius="10"
+                            Background="{StaticResource PanelBrush}"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="{StaticResource BorderHairline}"
+                            ColumnSpacing="{StaticResource SpaceSm}"
+                            CornerRadius="{StaticResource RadiusMd}"
                                                                       >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30" />
@@ -219,14 +222,14 @@
                             <Border
                                 Width="30"
                                 Height="30"
-                                Background="{StaticResource BrandGradientBrush}"
-                                CornerRadius="7">
+                                Background="{StaticResource AccentBrush}"
+                                CornerRadius="{StaticResource RadiusSm}">
                                 <TextBlock x:ConnectionId='21'
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     FontSize="9"
                                     FontWeight="Bold"
-                                    Foreground="White"
+                                    Foreground="{StaticResource OnAccentBrush}"
                                                               />
                             </Border>
                             <StackPanel
@@ -234,12 +237,12 @@
                                 MaxWidth="180"
                                 VerticalAlignment="Center">
                                 <TextBlock x:ConnectionId='19'
-                                    FontSize="12"
+                                    FontSize="{StaticResource FontSizeSm}"
                                                             
                                     TextTrimming="CharacterEllipsis" />
                                 <TextBlock x:ConnectionId='20'
-                                    FontSize="11"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    FontSize="{StaticResource FontSizeXs}"
+                                    Foreground="{StaticResource TextSecondaryBrush}"
                                                                 />
                             </StackPanel>
                             <Button x:ConnectionId='18'
@@ -248,7 +251,11 @@
                                 Style="{StaticResource SmallIconButtonStyle}"
                                               
                                 ToolTipService.ToolTip="Entfernen">
-                                <FontIcon FontSize="10" Glyph="&#xE711;" />
+                                <ImageIcon
+                                    Width="12"
+                                    Height="12"
+                                    helpers:Svg.Kind="close"
+                                    helpers:Svg.Tone="Secondary" />
                             </Button>
                         </Grid>
                     </DataTemplate>
@@ -259,7 +266,8 @@
         <InfoBar x:ConnectionId='7'
             x:Name="ErrorBar"
             Grid.Row="4"
-            Margin="20,0,20,8"
+            Margin="24,0,24,8"
+            CornerRadius="{StaticResource RadiusMd}"
             IsClosable="True"
             IsOpen="False"
             Severity="Error" />
@@ -267,66 +275,67 @@
         <!--  Footer  -->
         <Grid
             Grid.Row="5"
-            Padding="20,12"
-            Background="{ThemeResource LayerFillColorDefaultBrush}"
-            BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+            Padding="24,14"
+            Background="{StaticResource PanelBrush}"
+            BorderBrush="{StaticResource BorderBrush}"
             BorderThickness="0,1,0,0">
             <StackPanel Orientation="Horizontal" Spacing="6">
                 <Button x:ConnectionId='10'
                     x:Name="SendButton"
-                    MinWidth="132"
+                    MinWidth="128"
                     Height="40"
+                    helpers:Motion.HoverLift="True"
                                       
-                    Style="{StaticResource GradientButtonStyle}"
+                    Style="{StaticResource PrimaryButtonStyle}"
                     ToolTipService.ToolTip="Senden (Strg+Enter)">
                     <Grid>
                         <StackPanel x:ConnectionId='13'
                             x:Name="SendContent"
                             Orientation="Horizontal"
-                            Spacing="10">
-                            <FontIcon FontSize="14" Glyph="&#xE724;" />
+                            Spacing="{StaticResource SpaceSm}">
+                            <ImageIcon helpers:Svg.Kind="send" helpers:Svg.Tone="OnAccent" />
                             <TextBlock Text="Senden" />
                         </StackPanel>
                         <ProgressRing x:ConnectionId='14'
                             x:Name="SendRing"
                             Width="20"
                             Height="20"
-                            Foreground="White"
+                            Foreground="{StaticResource OnAccentBrush}"
                             IsActive="False" />
                     </Grid>
                 </Button>
                 <Button x:ConnectionId='11'
                     Margin="6,0,0,0"
+                    helpers:Motion.HoverLift="True"
                                         
                     Style="{StaticResource IconButtonStyle}"
                     ToolTipService.ToolTip="Dateien anhängen (oder hierher ziehen)">
-                    <FontIcon FontSize="15" Glyph="&#xE723;" />
+                    <ImageIcon helpers:Svg.Kind="paperclip" />
                 </Button>
                 <Button x:ConnectionId='12'
                     x:Name="DraftButton"
+                    helpers:Motion.HoverLift="True"
                                            
                     Style="{StaticResource IconButtonStyle}"
                     ToolTipService.ToolTip="Als Entwurf speichern">
-                    <FontIcon FontSize="15" Glyph="&#xE74E;" />
+                    <ImageIcon helpers:Svg.Kind="save" />
                 </Button>
             </StackPanel>
             <StackPanel
                 HorizontalAlignment="Right"
                 Orientation="Horizontal"
-                Spacing="12">
+                Spacing="{StaticResource SpaceMd}">
                 <TextBlock
                     VerticalAlignment="Center"
-                    FontSize="12"
-                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                    FontSize="{StaticResource FontSizeSm}"
+                    Foreground="{StaticResource TextTertiaryBrush}"
                     Text="Strg+Enter zum Senden" />
                 <Button x:ConnectionId='9'
+                    helpers:Motion.HoverLift="True"
                                        
                     Style="{StaticResource IconButtonStyle}"
                     ToolTipService.ToolTip="Verwerfen">
-                    <FontIcon
-                        FontSize="15"
-                        Foreground="{StaticResource DangerBrush}"
-                        Glyph="&#xE74D;" />
+                    <ImageIcon helpers:Svg.Kind="trash" helpers:Svg.Tone="Danger" />
                 </Button>
             </StackPanel>
         </Grid>
@@ -336,27 +345,20 @@
             x:Name="DropHint"
             Grid.RowSpan="6"
             Margin="8"
-            Background="{StaticResource BrandGradientSoftBrush}"
-            BorderBrush="{StaticResource BrandBrush}"
-            BorderThickness="2"
-            CornerRadius="12"
-            IsHitTestVisible="False"
-            Opacity="0">
-            <Border.OpacityTransition>
-                <ScalarTransition Duration="0:0:0.15" />
-            </Border.OpacityTransition>
+            Background="{StaticResource AccentSoftBrush}"
+            BorderBrush="{StaticResource AccentBrush}"
+            BorderThickness="1.5"
+            CornerRadius="{StaticResource RadiusLg}"
+            IsHitTestVisible="False">
             <StackPanel
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Spacing="8">
-                <FontIcon
-                    FontSize="32"
-                    Foreground="{ThemeResource BrandTextBrush}"
-                    Glyph="&#xE723;" />
-                <TextBlock
-                    FontWeight="SemiBold"
-                    Foreground="{ThemeResource BrandTextBrush}"
-                    Text="Zum Anhängen loslassen" />
+                Spacing="{StaticResource SpaceSm}">
+                <ImageIcon
+                    Width="32"
+                    Height="32"
+                    helpers:Svg.Kind="paperclip" />
+                <TextBlock FontWeight="SemiBold" Text="Zum Anhängen loslassen" />
             </StackPanel>
         </Border>
     </Grid>

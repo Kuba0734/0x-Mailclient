@@ -4,7 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helpers="using:MailClient.App.Helpers"
     xmlns:models="using:MailClient.Core.Models"
-    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls">
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
+    FontFamily="{StaticResource AppFont}">
 
     <ScrollViewer x:ConnectionId='2'
         x:Name="Scroller"
@@ -29,7 +30,7 @@
                         FontWeight="SemiBold"
                         Text="Einstellungen" />
                     <TextBlock
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Foreground="{StaticResource TextSecondaryBrush}"
                         Text="Konten, Darstellung, Autostart und Synchronisierung" />
                 </StackPanel>
                 <Button x:ConnectionId='20'
@@ -38,7 +39,7 @@
                                        
                     Style="{StaticResource IconButtonStyle}"
                     ToolTipService.ToolTip="Schließen">
-                    <FontIcon FontSize="13" Glyph="&#xE711;" />
+                    <ImageIcon helpers:Svg.Kind="close" />
                 </Button>
             </Grid>
 
@@ -59,21 +60,21 @@
                     <DataTemplate                                >
                         <toolkit:SettingsCard x:ConnectionId='16'                                                           >
                             <toolkit:SettingsCard.HeaderIcon>
-                                <FontIcon Glyph="&#xE715;" />
+                                <ImageIcon helpers:Svg.Kind="mail" />
                             </toolkit:SettingsCard.HeaderIcon>
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <TextBlock x:ConnectionId='17'
                                     Margin="0,0,8,0"
                                     VerticalAlignment="Center"
                                     FontSize="12"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Foreground="{StaticResource TextSecondaryBrush}"
                                                              />
                                 <Button x:ConnectionId='18'
                                                              
                                                   
                                     ToolTipService.ToolTip="Bearbeiten">
                                     <StackPanel Orientation="Horizontal" Spacing="8">
-                                        <FontIcon FontSize="13" Glyph="&#xE70F;" />
+                                        <ImageIcon helpers:Svg.Kind="edit" />
                                         <TextBlock Text="Bearbeiten" />
                                     </StackPanel>
                                 </Button>
@@ -81,10 +82,7 @@
                                                                
                                                   
                                     ToolTipService.ToolTip="Konto entfernen">
-                                    <FontIcon
-                                        FontSize="13"
-                                        Foreground="{StaticResource DangerBrush}"
-                                        Glyph="&#xE74D;" />
+                                    <ImageIcon helpers:Svg.Kind="trash" helpers:Svg.Tone="Danger" />
                                 </Button>
                             </StackPanel>
                         </toolkit:SettingsCard>
@@ -98,25 +96,22 @@
                 Header="Konto hinzufügen"
                 IsClickEnabled="True">
                 <toolkit:SettingsCard.HeaderIcon>
-                    <FontIcon Glyph="&#xE8FA;" />
+                    <ImageIcon helpers:Svg.Kind="user-plus" />
                 </toolkit:SettingsCard.HeaderIcon>
             </toolkit:SettingsCard>
 
             <!--  APPEARANCE  -->
             <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="Darstellung" />
 
-            <toolkit:SettingsCard Description="Hell, dunkel oder wie Windows" Header="App-Design">
+            <toolkit:SettingsCard Description="Schaltet Übergänge und Bewegungen fast vollständig ab (gilt auch, wenn Animationen in Windows deaktiviert sind)" Header="Animationen reduzieren">
                 <toolkit:SettingsCard.HeaderIcon>
-                    <FontIcon Glyph="&#xE790;" />
+                    <ImageIcon helpers:Svg.Kind="motion" />
                 </toolkit:SettingsCard.HeaderIcon>
-                <ComboBox x:ConnectionId='14'
-                    x:Name="ThemeCombo"
-                    MinWidth="180"
-                                                    >
-                    <ComboBoxItem Content="Wie Windows" Tag="System" />
-                    <ComboBoxItem Content="Hell" Tag="Light" />
-                    <ComboBoxItem Content="Dunkel" Tag="Dark" />
-                </ComboBox>
+                <ToggleSwitch x:ConnectionId='14'
+                    x:Name="ReduceMotionToggle"
+                    OffContent="Aus"
+                    OnContent="An"
+                                               />
             </toolkit:SettingsCard>
 
             <!--  STARTUP & TRAY  -->
@@ -127,7 +122,7 @@
                 Header="Mit Windows starten"
                 IsExpanded="True">
                 <toolkit:SettingsExpander.HeaderIcon>
-                    <FontIcon Glyph="&#xE7E8;" />
+                    <ImageIcon helpers:Svg.Kind="power" />
                 </toolkit:SettingsExpander.HeaderIcon>
                 <ToggleSwitch x:ConnectionId='12'
                     x:Name="AutostartToggle"
@@ -147,7 +142,7 @@
 
             <toolkit:SettingsCard Description="Das X schließt das Fenster, Mail läuft im Infobereich weiter und meldet neue E-Mails" Header="Beim Schließen in den Infobereich minimieren">
                 <toolkit:SettingsCard.HeaderIcon>
-                    <FontIcon Glyph="&#xE8BB;" />
+                    <ImageIcon helpers:Svg.Kind="close" />
                 </toolkit:SettingsCard.HeaderIcon>
                 <ToggleSwitch x:ConnectionId='11'
                     x:Name="CloseToTrayToggle"
@@ -158,7 +153,7 @@
 
             <toolkit:SettingsCard Description="Beim Minimieren verschwindet das Fenster aus der Taskleiste" Header="Beim Minimieren in den Infobereich">
                 <toolkit:SettingsCard.HeaderIcon>
-                    <FontIcon Glyph="&#xE921;" />
+                    <ImageIcon helpers:Svg.Kind="minus" />
                 </toolkit:SettingsCard.HeaderIcon>
                 <ToggleSwitch x:ConnectionId='10'
                     x:Name="MinimizeToTrayToggle"
@@ -172,7 +167,7 @@
 
             <toolkit:SettingsCard Description="Wie oft im Hintergrund nach neuen E-Mails gesucht wird" Header="Automatisch abrufen">
                 <toolkit:SettingsCard.HeaderIcon>
-                    <FontIcon Glyph="&#xE895;" />
+                    <ImageIcon helpers:Svg.Kind="clock" />
                 </toolkit:SettingsCard.HeaderIcon>
                 <ComboBox x:ConnectionId='9'
                     x:Name="SyncCombo"
@@ -190,7 +185,7 @@
 
             <toolkit:SettingsCard Description="Windows-Benachrichtigung, wenn neue E-Mails eintreffen und Mail im Hintergrund ist" Header="Benachrichtigungen">
                 <toolkit:SettingsCard.HeaderIcon>
-                    <FontIcon Glyph="&#xEA8F;" />
+                    <ImageIcon helpers:Svg.Kind="bell" />
                 </toolkit:SettingsCard.HeaderIcon>
                 <ToggleSwitch x:ConnectionId='8'
                     x:Name="NotificationsToggle"
@@ -210,7 +205,7 @@
                     <toolkit:SettingsCard Header="Tastenkürzel">
                         <TextBlock
                             FontSize="12"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{StaticResource TextSecondaryBrush}"
                             Text="Strg+N Neu · Strg+R Antworten · Strg+Umschalt+R Allen · Strg+L Weiterleiten · Strg+Q Gelesen · Entf Löschen · F5 Abrufen · Strg+E Suchen"
                             TextAlignment="Right"
                             TextWrapping="Wrap" />
@@ -219,7 +214,7 @@
                         <TextBlock x:ConnectionId='7'
                             x:Name="DataDirText"
                             FontSize="12"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Foreground="{StaticResource TextSecondaryBrush}"
                             IsTextSelectionEnabled="True"
                             TextWrapping="Wrap" />
                     </toolkit:SettingsCard>

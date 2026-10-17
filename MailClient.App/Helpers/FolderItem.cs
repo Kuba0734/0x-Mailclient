@@ -3,11 +3,12 @@ using Microsoft.UI.Xaml;
 
 namespace MailClient.App.Helpers;
 
-public sealed class FolderItem(string tag, string name, string glyph) : ObservableObject
+public sealed class FolderItem(string tag, string name, string icon) : ObservableObject
 {
     public string Tag { get; } = tag;
     public string Name { get; } = name;
-    public string Glyph { get; } = glyph;
+    /// <summary>Svg icon kind.</summary>
+    public string Icon { get; } = icon;
 
     private int _count;
     /// <summary>Unread (or, for drafts, total) message count shown as badge.</summary>

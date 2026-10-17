@@ -1,11 +1,7 @@
 using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Media;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using Windows.Foundation;
-using Windows.UI;
 
 namespace MailClient.App.Helpers;
 
@@ -13,50 +9,6 @@ namespace MailClient.App.Helpers;
 public static class Fmt
 {
     private static readonly CultureInfo De = new("de-DE");
-
-    private static readonly (Color A, Color B)[] AvatarPalette =
-    [
-        (Color.FromArgb(255, 99, 102, 241), Color.FromArgb(255, 139, 92, 246)),
-        (Color.FromArgb(255, 236, 72, 153), Color.FromArgb(255, 244, 63, 94)),
-        (Color.FromArgb(255, 249, 115, 22), Color.FromArgb(255, 234, 179, 8)),
-        (Color.FromArgb(255, 16, 185, 129), Color.FromArgb(255, 20, 184, 166)),
-        (Color.FromArgb(255, 14, 165, 233), Color.FromArgb(255, 59, 130, 246)),
-        (Color.FromArgb(255, 168, 85, 247), Color.FromArgb(255, 217, 70, 239)),
-        (Color.FromArgb(255, 239, 68, 68), Color.FromArgb(255, 249, 115, 22)),
-        (Color.FromArgb(255, 34, 197, 94), Color.FromArgb(255, 132, 204, 22)),
-    ];
-
-    private static readonly Dictionary<int, Brush> BrushCache = [];
-
-    public static Brush AvatarBrush(string? key)
-    {
-        var idx = StableHash(key ?? "") % AvatarPalette.Length;
-        if (BrushCache.TryGetValue(idx, out var cached)) return cached;
-
-        var (a, b) = AvatarPalette[idx];
-        var brush = new LinearGradientBrush
-        {
-            StartPoint = new Point(0, 0),
-            EndPoint = new Point(1, 1),
-            GradientStops =
-            {
-                new GradientStop { Color = a, Offset = 0 },
-                new GradientStop { Color = b, Offset = 1 }
-            }
-        };
-        BrushCache[idx] = brush;
-        return brush;
-    }
-
-    private static int StableHash(string s)
-    {
-        unchecked
-        {
-            var h = 23;
-            foreach (var ch in s.ToLowerInvariant()) h = h * 31 + ch;
-            return Math.Abs(h % 10007);
-        }
-    }
 
     public static string Initials(string? name)
     {
@@ -92,7 +44,7 @@ public static class Fmt
 
     public static double ReadOpacity(bool isRead) => isRead ? 0.72 : 1.0;
 
-    public static string ReadGlyph(bool isRead) => isRead ? "" : "";
+    public static string ReadIcon(bool isRead) => isRead ? "mail" : "mail-open";
     public static string ReadLabel(bool isRead) => isRead ? "Als ungelesen markieren" : "Als gelesen markieren";
     public static string FlagLabel(bool flagged) => flagged ? "Markierung entfernen" : "Markieren";
 }

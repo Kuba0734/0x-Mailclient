@@ -120,6 +120,12 @@
     <Color x:Key="AccentHoverColor">#E8E8E8</Color>
     <Color x:Key="AccentPressedColor">#D0D0D0</Color>
 
+    <!--  HTML mails keep their own colors on a light "paper" sheet  -->
+    <Color x:Key="PaperColor">#FFFFFF</Color>
+    <Color x:Key="PaperTextColor">#1A1A1A</Color>
+    <Color x:Key="PaperMutedColor">#6B6B6B</Color>
+    <Color x:Key="PaperBorderColor">#D4D4D4</Color>
+
     <x:Double x:Key="DialogMaxWidth">920</x:Double>
     <x:Double x:Key="DialogMaxHeight">900</x:Double>
 </ResourceDictionary>

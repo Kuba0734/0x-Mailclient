@@ -1,5 +1,6 @@
 App.xbf
 MainWindow.xbf
+Themes\Tokens.xbf
 Views\AccountDialog.xbf
 Views\ComposePanel.xbf
 Views\MainPage.xbf

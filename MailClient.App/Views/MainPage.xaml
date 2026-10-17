@@ -737,7 +737,7 @@
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Top"
                                             Fill="{StaticResource AccentBrush}"
-                                            Opacity="0" />
+                                            Visibility="Collapsed" />
                                     </Grid>
                                 </Button>
                                 <Button

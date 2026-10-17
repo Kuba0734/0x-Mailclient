@@ -2,6 +2,9 @@
     x:Class="MailClient.App.Views.AccountDialog"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:helpers="using:MailClient.App.Helpers"
+    CornerRadius="{StaticResource RadiusXl}"
+    FontFamily="{StaticResource AppFont}"
     CloseButtonText="Abbrechen"
     DefaultButton="Primary"
     PrimaryButtonClick="Save_Click"
@@ -15,12 +18,9 @@
             <Border
                 Width="40"
                 Height="40"
-                Background="{StaticResource BrandGradientBrush}"
-                CornerRadius="12">
-                <FontIcon
-                    FontSize="18"
-                    Foreground="White"
-                    Glyph="&#xE715;" />
+                Background="{StaticResource AccentBrush}"
+                CornerRadius="{StaticResource RadiusMd}">
+                <ImageIcon helpers:Svg.Kind="mail" helpers:Svg.Tone="OnAccent" />
             </Border>
             <StackPanel VerticalAlignment="Center">
                 <TextBlock
@@ -30,7 +30,7 @@
                     Text="Konto hinzufügen" />
                 <TextBlock
                     FontSize="12"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Foreground="{StaticResource TextSecondaryBrush}"
                     Text="Serverdaten werden für bekannte Anbieter automatisch ausgefüllt" />
             </StackPanel>
         </StackPanel>
@@ -91,13 +91,13 @@
                 HorizontalContentAlignment="Stretch">
                 <Expander.Header>
                     <StackPanel Padding="0,10" Orientation="Horizontal" Spacing="12">
-                        <FontIcon FontSize="16" Glyph="&#xE968;" />
+                        <ImageIcon helpers:Svg.Kind="server" helpers:Svg.Tone="Secondary" />
                         <StackPanel>
                             <TextBlock Text="Servereinstellungen" />
                             <TextBlock
                                 x:Name="ServerSummary"
                                 FontSize="12"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Foreground="{StaticResource TextSecondaryBrush}"
                                 Text="IMAP &amp; SMTP" />
                         </StackPanel>
                     </StackPanel>
@@ -163,7 +163,7 @@
                     </Grid>
                     <TextBlock
                         FontSize="12"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Foreground="{StaticResource TextSecondaryBrush}"
                         Text="Port 993/465 = SSL direkt, 143/587 = STARTTLS. Die richtige Methode wird automatisch gewählt."
                         TextWrapping="Wrap" />
                 </StackPanel>

@@ -33,7 +33,7 @@ public sealed partial class SettingsView : UserControl
             _accounts.Add(acc);
 
         var s = SettingsService.Current;
-        ThemeCombo.SelectedIndex = s.Theme switch { "Light" => 1, "Dark" => 2, _ => 0 };
+        ReduceMotionToggle.IsOn = s.ReduceMotion;
         StartMinimizedToggle.IsOn = s.StartMinimized;
         CloseToTrayToggle.IsOn = s.CloseToTray;
         MinimizeToTrayToggle.IsOn = s.MinimizeToTray;
@@ -94,14 +94,6 @@ public sealed partial class SettingsView : UserControl
 
     // ── Preferences ──────────────────────────────────────────────────────
 
-    private void Theme_Changed(object sender, SelectionChangedEventArgs e)
-    {
-        if (_loading || ThemeCombo.SelectedItem is not ComboBoxItem item) return;
-        SettingsService.Current.Theme = (string)item.Tag;
-        SettingsService.Save();
-        ThemeHelper.Apply(SettingsService.Current.Theme);
-    }
-
     private void Sync_Changed(object sender, SelectionChangedEventArgs e)
     {
         if (_loading || SyncCombo.SelectedItem is not ComboBoxItem item) return;
@@ -117,6 +109,7 @@ public sealed partial class SettingsView : UserControl
         s.CloseToTray = CloseToTrayToggle.IsOn;
         s.MinimizeToTray = MinimizeToTrayToggle.IsOn;
         s.Notifications = NotificationsToggle.IsOn;
+        s.ReduceMotion = ReduceMotionToggle.IsOn;
         SettingsService.Save();
     }
 

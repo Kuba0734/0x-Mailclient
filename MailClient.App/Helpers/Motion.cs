@@ -137,6 +137,14 @@ public static class Motion
         Animate(v, "Opacity", opacity, Tokens.Ms(duration));
     }
 
+    /// <summary>Immediate opacity (initial state of elements that fade in later).</summary>
+    public static void SetOpacity(UIElement element, float opacity)
+    {
+        var v = VisualOf(element);
+        v.StopAnimation("Opacity");
+        v.Opacity = opacity;
+    }
+
     /// <summary>Puts composition properties back to the resting state.</summary>
     public static void Reset(UIElement element)
     {
@@ -166,6 +174,38 @@ public static class Motion
             Reset(from);
             from.IsHitTestVisible = true;
         }
+    }
+
+    /// <summary>Fade + small slide whenever the element's Visibility toggles (no abrupt pop-in).</summary>
+    public static void ImplicitFade(UIElement element, float slideY = 6f)
+    {
+        var v = VisualOf(element);
+        if (!Enabled) return;
+        var c = v.Compositor;
+
+        var showOpacity = c.CreateScalarKeyFrameAnimation();
+        showOpacity.Target = "Opacity";
+        showOpacity.InsertKeyFrame(0f, 0f);
+        showOpacity.InsertKeyFrame(1f, 1f, Ease(c));
+        showOpacity.Duration = Tokens.Ms("MotionBase");
+
+        var showSlide = c.CreateVector3KeyFrameAnimation();
+        showSlide.Target = "Translation";
+        showSlide.InsertKeyFrame(0f, new Vector3(0, slideY, 0));
+        showSlide.InsertKeyFrame(1f, Vector3.Zero, Ease(c));
+        showSlide.Duration = Tokens.Ms("MotionBase");
+
+        var show = c.CreateAnimationGroup();
+        show.Add(showOpacity);
+        show.Add(showSlide);
+
+        var hide = c.CreateScalarKeyFrameAnimation();
+        hide.Target = "Opacity";
+        hide.InsertKeyFrame(1f, 0f, Ease(c));
+        hide.Duration = Tokens.Ms("MotionFast");
+
+        ElementCompositionPreview.SetImplicitShowAnimation(element, show);
+        ElementCompositionPreview.SetImplicitHideAnimation(element, hide);
     }
 
     // ── Hover / press ────────────────────────────────────────────────────
