@@ -28,6 +28,7 @@ public sealed partial class MainWindow : Window
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(AppTitleBar);
         AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
+        AppWindow.TitleBar.PreferredTheme = TitleBarTheme.Dark;
         AppWindow.Title = "Mail";
 
         var icon = Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico");
@@ -42,7 +43,7 @@ public sealed partial class MainWindow : Window
         AppWindow.Closing += AppWindow_Closing;
         AppWindow.Changed += AppWindow_Changed;
 
-        ShellPage.SyncStateChanged += isSyncing => AnimationHelper.SetSpinning(SyncIcon, isSyncing);
+        ShellPage.SyncStateChanged += isSyncing => Motion.Spin(SyncIcon, isSyncing);
         ShellPage.SearchFocusRequested += () => SearchBox.Focus(FocusState.Keyboard);
         ShellPage.SearchCleared += () => SearchBox.Text = "";
     }

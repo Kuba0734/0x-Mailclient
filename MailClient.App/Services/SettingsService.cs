@@ -6,7 +6,7 @@ namespace MailClient.App.Services;
 
 public class AppSettings
 {
-    public string Theme { get; set; } = "System";
+    public bool ReduceMotion { get; set; }
 
     public bool StartWithWindows { get; set; }
     public bool StartMinimized { get; set; } = true;

@@ -58,7 +58,6 @@ public partial class App : Application
         _dispatcher = DispatcherQueue.GetForCurrentThread();
 
         _window = new MainWindow();
-        ThemeHelper.Apply(SettingsService.Current.Theme);
 
         Tray.OpenRequested += ShowMainWindow;
         Tray.ComposeRequested += () =>
