@@ -44,6 +44,7 @@ public sealed partial class SettingsView : UserControl
         SyncCombo.SelectedItem = syncItem ?? SyncCombo.Items[3];
 
         DataDirText.Text = App.DataDir;
+        AboutExpander.Description = $"Version {UpdateService.Current.ToString(3)} · IMAP/SMTP via MailKit · WinUI 3";
         SettingsInfoBar.IsOpen = false;
 
         AutostartToggle.IsOn = await AutostartService.IsEnabledAsync();
@@ -51,6 +52,14 @@ public sealed partial class SettingsView : UserControl
     }
 
     private void Close_Click(object sender, RoutedEventArgs e) => CloseRequested?.Invoke();
+
+    private async void CheckUpdate_Click(object sender, RoutedEventArgs e)
+    {
+        UpdateButton.IsEnabled = false;
+        UpdateCard.Description = "Suche nach Updates …";
+        UpdateCard.Description = await App.Instance!.CheckForUpdateAsync(manual: true);
+        UpdateButton.IsEnabled = true;
+    }
 
     // ── Accounts ─────────────────────────────────────────────────────────
 

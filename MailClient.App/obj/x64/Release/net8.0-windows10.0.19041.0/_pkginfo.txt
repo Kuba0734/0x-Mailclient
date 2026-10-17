@@ -1,1 +1,0 @@
-C:\Dev\MailClient\MailClient.App\AppPackages\MailClient.App_1.0.5.0_x64_Test\MailClient.App_1.0.5.0_x64.msix

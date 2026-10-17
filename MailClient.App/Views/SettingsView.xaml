@@ -197,11 +197,14 @@
             <!--  ABOUT  -->
             <TextBlock Style="{StaticResource SectionHeaderStyle}" Text="Info" />
 
-            <toolkit:SettingsExpander Description="Version 2.0 · IMAP/SMTP via MailKit · WinUI 3" Header="Mail">
+            <toolkit:SettingsExpander x:Name="AboutExpander" Description="IMAP/SMTP via MailKit · WinUI 3" Header="Mail">
                 <toolkit:SettingsExpander.HeaderIcon>
                     <ImageIcon Source="ms-appx:///Assets/AppLogo.png" />
                 </toolkit:SettingsExpander.HeaderIcon>
                 <toolkit:SettingsExpander.Items>
+                    <toolkit:SettingsCard x:Name="UpdateCard" Header="Updates" Description="Neue Versionen werden beim Start und alle 6 Stunden automatisch installiert">
+                        <Button x:Name="UpdateButton" helpers:Motion.HoverLift="True" Click="CheckUpdate_Click" Content="Nach Updates suchen" />
+                    </toolkit:SettingsCard>
                     <toolkit:SettingsCard Header="Tastenkürzel">
                         <TextBlock
                             FontSize="12"

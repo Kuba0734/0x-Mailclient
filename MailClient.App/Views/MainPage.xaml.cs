@@ -82,6 +82,7 @@ public sealed partial class MainPage : Page
     };
 
     public bool IsPaneCollapsed { get; private set; }
+    public bool IsComposing => _composeOpen;
 
     public MainPage()
     {

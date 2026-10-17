@@ -1,1 +1,13 @@
 deploy.bat
+
+# Build output
+bin/
+obj/
+artifacts/
+AppPackages/
+BundleArtifacts/
+.vs/
+*.user
+
+# Signing keys never belong in the repo
+*.pfx
