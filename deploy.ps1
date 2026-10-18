@@ -24,6 +24,14 @@ foreach ($tool in 'git', 'dotnet', 'gh') {
 gh auth status *> $null
 if ($LASTEXITCODE -ne 0) { Fail "GitHub CLI ist nicht angemeldet. Bitte einmal 'gh auth login' ausführen." }
 
+$Iscc = @(
+    (Get-Command iscc -ErrorAction SilentlyContinue).Source,
+    "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+    "$env:ProgramFiles\Inno Setup 6\ISCC.exe",
+    "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe"
+) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+if (-not $Iscc) { Fail "Inno Setup fehlt (für die Setup.exe). Einmalig installieren:`n  winget install JRSoftware.InnoSetup" }
+
 $branch = (git rev-parse --abbrev-ref HEAD).Trim()
 Write-Host "Ordner : $PSScriptRoot"
 Write-Host "Branch : $branch"
@@ -67,6 +75,12 @@ $shaFile = "$zip.sha256"
 [IO.File]::WriteAllText($shaFile, "$hash  $AssetName`n")
 Write-Host ("ZIP: {0:N1} MB, SHA-256 {1}" -f ((Get-Item $zip).Length / 1MB), $hash)
 
+Step 'Baue Setup …'
+& $Iscc /Q "/DAppVersion=$version" "/DSourceDir=$publish" "/DOutputDir=$Artifacts" (Join-Path $PSScriptRoot 'installer\Mail.iss')
+if ($LASTEXITCODE -ne 0) { Fail 'Setup konnte nicht gebaut werden.' }
+$setup = Join-Path $Artifacts 'MailSetup-x64.exe'
+Write-Host ("Setup: {0:N1} MB" -f ((Get-Item $setup).Length / 1MB))
+
 # ── Commit, tag, push ─────────────────────────────────────────────────────
 Step 'Commit & Push …'
 git add -A
@@ -92,8 +106,8 @@ if ($LASTEXITCODE -ne 0) { Fail "Tag $tag konnte nicht gepusht werden." }
 
 # ── GitHub release ────────────────────────────────────────────────────────
 Step "Erstelle GitHub-Release $tag …"
-$notes = "$msg`n`nInstallation: ZIP entpacken (z. B. nach %LOCALAPPDATA%\Programs\Mail) und MailClient.App.exe starten. Danach aktualisiert sich die App selbst."
-gh release create $tag $zip $shaFile --title "Mail $tag" --notes $notes --latest
+$notes = "$msg`n`n**Installation:** MailSetup-x64.exe herunterladen und ausführen (keine Admin-Rechte nötig). Danach aktualisiert sich die App selbst.`n`nDie ZIP-Datei wird vom automatischen Update verwendet."
+gh release create $tag $setup $zip $shaFile --title "Mail $tag" --notes $notes --latest
 if ($LASTEXITCODE -ne 0) { Fail 'Release konnte nicht erstellt werden (Commit und Tag sind bereits gepusht).' }
 
 Write-Host "`n==========================================" -ForegroundColor Green
